@@ -9,16 +9,22 @@ function register_form( $args ) {
 	<form action="" name="<?php echo esc_attr( $args['name'] ) ?>">
 		<?php foreach( $args['fields'] as $field ) :
             echo get_field( Template\get_template_name( $field[ 'type' ] ), $field );
-		endforeach; ?>
-		<input type="submit" name="omg-form-submit-btn" class="omg-form-submit-btn" />
+		endforeach;
+        echo get_field( Template\get_template_name( 'submit' ), [] ); ?>
 	</form>
 
 	<?php return ob_get_clean();
 }
 
 function format_field( $field ) {
+
+    if ( empty( $field ) ) {
+        return false;
+    }
+
 	$field[ 'name' ] = sprintf( 'omg-forms-%s', $field[ 'slug' ]  );
 	$field[ 'required' ] = ( true === $field['required'] ) ? 'data-required="1"' : 'data-required="0"';
+
 	return $field;
 }
 
