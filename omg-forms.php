@@ -29,6 +29,7 @@ require_once OMG_PLUGIN_DIR . '/includes/core.php';
 require_once OMG_PLUGIN_DIR . '/includes/information-architecture/index.php';
 require_once OMG_PLUGIN_DIR . '/includes/api.php';
 require_once OMG_PLUGIN_DIR . '/includes/form-functions.php';
+require_once OMG_PLUGIN_DIR . '/includes/template.php';
 
 \OMGForms\Plugin\IA\setup();
 \OMGForms\Plugin\Core\setup();

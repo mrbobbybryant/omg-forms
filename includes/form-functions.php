@@ -1,24 +1,14 @@
 <?php
 namespace OMGForms\Plugin\Core;
 
-
+use OMGForms\Plugin\Template;
 
 function register_form( $args ) {
 	ob_start(); ?>
 
 	<form action="" name="<?php echo esc_attr( $args['name'] ) ?>">
 		<?php foreach( $args['fields'] as $field ) :
-			if ( 'text' === $field['type'] ) {
-				echo output_text_field( $field );
-			}
-
-			if ( 'email' === $field['type'] ) {
-				echo output_email_field( $field );
-			}
-
-			if ( 'textarea' === $field['type'] ) {
-				echo output_textarea( $field );
-			}
+            echo get_field( Template\get_template_name( $field[ 'type' ] ), $field );
 		endforeach; ?>
 		<input type="submit" name="omg-form-submit-btn" class="omg-form-submit-btn" />
 	</form>
@@ -26,56 +16,13 @@ function register_form( $args ) {
 	<?php return ob_get_clean();
 }
 
-function omg_locate_template( $name ) {
-    $child = sprintf( '%s/forms/%s' , get_stylesheet_directory(), $name );
-    $parent = sprintf( '%s/forms/%s', get_template_directory(), $name );
-    $core = sprintf( '%s/includes/templates/%s', OMG_PLUGIN_DIR, $name );
-
-    if ( file_exists( $child ) ) {
-        return $child;
-    } else if ( $parent ) {
-        return $parent;
-    } else {
-        return $core;
-    }
+function format_field( $field ) {
+	$field[ 'name' ] = sprintf( 'omg-forms-%s', $field[ 'slug' ]  );
+	$field[ 'required' ] = ( true === $field['required'] ) ? 'data-required="1"' : 'data-required="0"';
+	return $field;
 }
 
-function output_text_field( $settings ) {
-    $file = omg_locate_template( $settings[ 'name' ] );
-	$name = sprintf( 'omg-forms-%s', $settings[ 'name' ]  );
-	$required = ( true === $settings['required'] ) ? 'data-required="1"' : 'data-required="0"';
-	ob_start(); ?>
-
-	<label>
-		<?php echo esc_html ( $settings['label'] ); ?>
-		<input type="text" name="<?php echo esc_attr( $name ) ?>" <?php echo $required ?>/>
-	</label>
-
-	<?php return ob_get_clean();
-}
-
-function output_email_field( $settings ) {
-	$name = sprintf( 'omg-forms-%s', $settings[ 'name' ]  );
-	$required = ( true === $settings['required'] ) ? 'data-required="1"' : 'data-required="0"';
-	ob_start(); ?>
-
-	<label>
-		<?php echo esc_html ( $settings['label'] ); ?>
-		<input type="email" name="<?php echo esc_attr( $name ) ?>" <?php echo $required; ?>/>
-	</label>
-
-	<?php return ob_get_clean();
-}
-
-function output_textarea( $settings ) {
-	$name = sprintf( 'omg-forms-%s', $settings[ 'name' ]  );
-	$required = ( true === $settings['required'] ) ? 'data-required="1"' : 'data-required="0"';
-	ob_start(); ?>
-
-	<label>
-		<?php echo esc_html ( $settings['label'] ); ?>
-		<textarea name="<?php echo esc_attr( $name ) ?>" <?php echo $required; ?>></textarea>
-	</label>
-
-	<?php return ob_get_clean();
+function get_field( $field_type, $settings ) {
+    $field_settings = format_field( $settings );
+	return Template\get_template_part( $field_type, $field_settings );
 }
