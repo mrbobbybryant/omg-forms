@@ -3,7 +3,7 @@
 	<?php foreach( $options as $option ) : ?>
 		<label>
 			<?php echo esc_html( $option['label'] ); ?>
-			<input type="checkbox" name="<?php echo esc_attr( $name ); ?>" value="<?php echo esc_attr( $option['value'] ) ?>"/>
+			<input type="checkbox" name="<?php echo esc_attr( $name ); ?>" value="<?php echo esc_attr( $option['value'] ) ?>" <?php echo $required ?>/>
 		</label>
 
 	<?php endforeach ?>

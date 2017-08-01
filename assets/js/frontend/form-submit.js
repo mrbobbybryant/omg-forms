@@ -6,9 +6,12 @@ export default function() {
   }
 
   [].forEach.call( formButtons, ( button ) => {
-    button.addEventListener( 'click', (e) => {
+    const form = button.closest( 'form' );
+
+    form.addEventListener( 'submit', (e) => {
       e.preventDefault();
-      const data = getFormData( button );
+
+      const data = new FormData( form );
 
       submitForm( data )
         .then( (response) => {
@@ -18,6 +21,13 @@ export default function() {
           console.log(error);
         });
     } );
+    // button.addEventListener( 'click', (e) => {
+    //   e.preventDefault();
+    //
+    //   const data = getFormData( button );
+    //   console.log( data );
+
+    // } );
   } );
 }
 
@@ -31,13 +41,13 @@ const getFormData = ( button ) => {
   const elements = getFormElements( button );
   const form = button.closest( 'form' );
 
-  info.form = form.getAttribute( 'name' );
+  info.form = form.getAttribute( 'id' );
 
   info.fields = [].map.call( elements, ( element ) => {
     return {
       value: element.value,
       type : getFieldType( element ),
-      name: element.getAttribute( 'name' ),
+      id: element.getAttribute( 'name' ),
       required: element.dataset.required
     }
   } );
@@ -80,7 +90,6 @@ const submitForm = ( data ) => {
 		xhr.open('POST', endpoint, true);
 
 		xhr.setRequestHeader('X-WP-NONCE', OMGForms.nonce);
-		xhr.setRequestHeader('Content-Type', 'application/json');
-		xhr.send( JSON.stringify( data ) );
+		xhr.send( data );
 	})
 }

@@ -2,6 +2,7 @@
 namespace OMGForms\Plugin\API;
 
 use OMGForms\Plugin\IA;
+use OMGForms\Plugin\Core;
 
 class OMG_Entries_Controller extends \WP_REST_Posts_Controller {
 	public function create_item_permissions_check( $request ) {
@@ -16,6 +17,15 @@ class OMG_Entries_Controller extends \WP_REST_Posts_Controller {
 
 	public function create_item( $request ) {
 		$parameters = $request->get_params();
+		$form = Core\get_form( $parameters['form'] );
+
+		if ( empty( $form ) ) {
+			return new \WP_Error(
+				'omg_form_validation_fail',
+				'That is not a valid form.',
+				array( 'status' => 400 )
+			);
+		}
 
 		$required = $this->check_required_forms( $parameters['fields'] );
 
@@ -23,18 +33,16 @@ class OMG_Entries_Controller extends \WP_REST_Posts_Controller {
 			return $required;
 		}
 
-		$data = $this->sanitize_form_data( $parameters['fields'] );
+		$data = $this->sanitize_form_data( $parameters['fields'], $form );
 
 		$data = apply_filters( 'omg_forms_sanitize_data', $data, $parameters['form'] );
-
-		$form = $this->get_form( $parameters['form'] );
 
 		if ( is_wp_error( $form ) ) {
 			return $form;
 		}
 
 		$entry_id = wp_insert_post( [
-			'post_title' => sprintf( '%s: %s', $this->get_form_name( $parameters['form'] ), $data[0]['value'] ),
+			'post_title' => sprintf( '%s: Temp', Core\get_form_name( $parameters['form'] ) ),
 			'post_status' => 'publish',
 			'post_type' =>  IA\get_type_entries()
 		], true );
@@ -42,6 +50,11 @@ class OMG_Entries_Controller extends \WP_REST_Posts_Controller {
 		if ( is_wp_error( $entry_id ) ) {
 			return $entry_id;
 		}
+
+		/**
+		 * Update entry title to be a concatenation of Form Name and Entry post_id
+		 */
+		wp_update_post( $entry_id, [ 'post_title' => sprintf( '%s: %d' ), Core\get_form_name( $parameters['form'] ), $entry_id ] );
 
 		$this->save_field_data( $entry_id, $data );
 		$this->set_form_relationship( $entry_id, $form );
@@ -65,34 +78,18 @@ class OMG_Entries_Controller extends \WP_REST_Posts_Controller {
 
 	}
 
-	protected function sanitize_form_data( $fields ) {
-		return array_map( function( $field ) {
-			$sanitize = $this->get_field_sanitize_type( $field[ 'type' ] );
-			$field[ 'value' ] = call_user_func_array( $sanitize, [ $field[ 'value' ] ] );
+	protected function sanitize_form_data( $fields, $form ) {
+		return array_map( function ( $field ) use ( $form ) {
+			if ( isset( $form[ 'fields' ][ $field[ 'name' ] ][ 'sanitize_cb' ] ) ) {
+				$sanitize = $form[ 'fields' ][ $field[ 'name' ] ][ 'sanitize_cb' ];
+			} else {
+				$sanitize = $this->get_field_sanitize_type( $field['type'] );
+			}
+
+			$field['value'] = call_user_func_array( $sanitize, [ $field['value'] ] );
+
 			return $field;
 		}, $fields );
-	}
-
-	public function get_form( $slug ) {
-		$form = get_term_by( 'slug', $slug, IA\get_tax_forms() );
-
-		if ( empty( $form ) ) {
-			$form = $this->create_form( $slug );
-		}
-
-		return $form;
-	}
-
-	public function create_form( $slug ) {
-		$name = $this->get_form_name( $slug );
-
-		$name = apply_filters( 'omg_forms_pre_form_create', $name, $slug );
-
-		return wp_insert_term( $name, IA\get_tax_forms(), [ 'slug' => $slug ] );
-	}
-
-	protected function get_form_name( $slug ) {
-		return str_replace( '-', ' ', $slug );
 	}
 
 	protected function get_field_sanitize_type( $type ) {
