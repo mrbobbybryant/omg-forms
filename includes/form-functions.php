@@ -18,6 +18,11 @@ function register_form( $args ) {
 
 function display_form( $slug ) {
     $args = get_form( $slug );
+
+		if ( empty( $args ) || ! isset( $args[ 'fields' ] ) ) {
+        return false;
+    }
+		
 	ob_start(); ?>
 
     <form action="" id="<?php echo esc_attr( $args['ID'] ) ?>">
