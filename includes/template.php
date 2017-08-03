@@ -17,7 +17,7 @@ function get_template_paths( $name ) {
 	return [
 		sprintf( '%s/forms/%s' , get_stylesheet_directory(), $name ),
 		sprintf( '%s/forms/%s', get_template_directory(), $name ),
-		sprintf( '%sincludes/templates/%s', OMG_FORMS_DIR, $name )
+		sprintf( '%s/includes/templates/%s', OMG_FORMS_DIR, $name )
 	];
 }
 
