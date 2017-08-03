@@ -3,7 +3,7 @@
   "title": "develop With WP",
   "description": "The Best place to learn WordPress Development",
   "version": "0.1.0",
-  "homepage": "http://wordpress.org/plugins",
+  "homepage": "https://github.com/mrbobbybryant/omg-forms",
   "scripts": {
     "start": "webpack --config webpack.config.js",
     "watch": "webpack --progress --colors --watch",
@@ -23,7 +23,6 @@
     "babel-loader": "^6.2.10",
     "babel-preset-es2015": "^6.22.0",
     "babel-preset-es2016": "^6.22.0",
-    "babel-preset-react": "^6.22.0",
     "css-loader": "^0.26.1",
     "extract-text-webpack-plugin": "2.0.0-beta.4",
     "file-loader": "^0.9.0",
@@ -36,15 +35,7 @@
   "keywords": [],
   "dependencies": {
     "autoprefixer": "^6.7.7",
-    "aws-sdk": "^2.11.0",
-    "classnames": "^2.2.5",
-    "dropzone": "^4.3.0",
-    "hls.js": "^0.7.0",
-    "mobile-detect": "^1.3.5",
-    "normalize.css": "^5.0.0",
-    "phpunserialize": "^1.0.1",
     "postcss-nested": "^1.0.0",
-    "query-string": "^4.3.4",
     "url-loader": "^0.5.8",
     "whatwg-fetch": "^2.0.3"
   }

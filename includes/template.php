@@ -1,5 +1,5 @@
 <?php
-namespace OMGForms\Plugin\Template;
+namespace OMGForms\Template;
 
 function locate_template( $name ) {
 	$template_paths = get_template_paths( $name );

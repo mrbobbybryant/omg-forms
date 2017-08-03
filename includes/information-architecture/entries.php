@@ -1,5 +1,5 @@
 <?php
-namespace OMGForms\Plugin\IA;
+namespace OMGForms\IA;
 
 function register_entries_cpt() {
 	$labels = array(
@@ -33,7 +33,7 @@ function register_entries_cpt() {
 		),
 		'show_in_rest'          => true,
 		'rest_base'             => 'entries',
-		'rest_controller_class' => '\OMGForms\Plugin\API\OMG_Entries_Controller'
+		'rest_controller_class' => '\OMGForms\API\OMG_Entries_Controller'
 	);
 
 	register_post_type( get_type_entries(), $args );

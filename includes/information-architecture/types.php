@@ -1,5 +1,5 @@
 <?php
-namespace OMGForms\Plugin\IA;
+namespace OMGForms\IA;
 
 function get_tax_forms() {
 	return 'omg_forms';

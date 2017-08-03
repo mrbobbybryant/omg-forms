@@ -1,8 +1,8 @@
 <?php
-namespace OMGForms\Plugin\Core;
+namespace OMGForms\Core;
 
-use OMGForms\Plugin\Template;
-use OMGForms\Plugin\IA;
+use OMGForms\Template;
+use OMGForms\IA;
 
 function register_form( $args ) {
 	global $omg_forms;
@@ -22,7 +22,7 @@ function display_form( $slug ) {
 		if ( empty( $args ) || ! isset( $args[ 'fields' ] ) ) {
         return false;
     }
-		
+
 	ob_start(); ?>
 
     <form action="" id="<?php echo esc_attr( $args['ID'] ) ?>">

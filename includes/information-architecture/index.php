@@ -1,5 +1,5 @@
 <?php
-namespace OMGForms\Plugin\IA;
+namespace OMGForms\IA;
 
 function setup() {
 	require_once 'types.php';

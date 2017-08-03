@@ -16,20 +16,20 @@ require_once OMG_FORMS_DIR . '/includes/api.php';
 require_once OMG_FORMS_DIR . '/includes/form-functions.php';
 require_once OMG_FORMS_DIR . '/includes/template.php';
 
-\OMGForms\Plugin\IA\setup();
-\OMGForms\Plugin\Core\setup();
+\OMGForms\IA\setup();
+\OMGForms\Core\setup();
 
 function install() {
-	\OMGForms\Plugin\IA\register_entries_cpt();
+	\OMGForms\IA\register_entries_cpt();
 	flush_rewrite_rules();
 }
 
 /**
  * Bootstrap Initial Forms Setup
  */
-$version = get_option( 'omg_forms_version', OMG_PLUGIN_VERSION );
+$version = get_option( 'omg_forms_version', OMG_FORMS_VERSION );
 
 if ( empty( $version ) ) {
 	install();
-	update_option( 'omg_forms_version', OMG_PLUGIN_VERSION );
+	update_option( 'omg_forms_version', OMG_FORMS_VERSION );
 }

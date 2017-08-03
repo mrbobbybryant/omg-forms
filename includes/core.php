@@ -1,5 +1,5 @@
 <?php
-namespace OMGForms\Plugin\Core;
+namespace OMGForms\Core;
 
 function setup() {
 	add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\scripts' );

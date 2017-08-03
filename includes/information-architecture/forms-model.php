@@ -1,5 +1,5 @@
 <?php
-namespace OMGForms\Plugin\IA;
+namespace OMGForms\IA;
 
 function get_forms_model_keys( $key = false ) {
 	$prefix = 'omg_form';

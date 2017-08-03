@@ -1,8 +1,8 @@
 <?php
-namespace OMGForms\Plugin\API;
+namespace OMGForms\API;
 
-use OMGForms\Plugin\IA;
-use OMGForms\Plugin\Core;
+use OMGForms\IA;
+use OMGForms\Core;
 
 class OMG_Entries_Controller extends \WP_REST_Posts_Controller {
 	public function create_item_permissions_check( $request ) {
