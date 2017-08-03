@@ -1,0 +1,27 @@
+{
+  "name": "omg-forms",
+  "description": "A WordPress Forms library built for developers.",
+  "version": "0.1.0",
+  "type": "library",
+  "keywords": [],
+  "homepage": "https://github.com/mrbobbybryant/omg-forms",
+  "license": "GPL-2.0+",
+  "author": {
+    "name": "Bobby Bryant",
+    "email": "bobby@developwithwp.com",
+    "homepage": "Bobby Bryant",
+    "role": "Developer"
+  },
+  "minimum-stability": "dev",
+  "repositories" : [
+    {
+      "type" : "composer",
+      "url"  : "https://wpackagist.org"
+    }
+  ],
+  "require": {},
+  "require-dev": {},
+  "autoload": {
+    "files": [ "omg-forms.php" ]
+  }
+}
