@@ -6,7 +6,7 @@ function setup() {
 }
 
 function scripts() {
-	wp_enqueue_script( 'omg-js', dirname( __FILE__ ) . '/vendor/omg-forms/dist/frontend.bundle.js', array(), OMG_FORMS_VERSION, true );
+	wp_enqueue_script( 'omg-js', OMG_FORMS_URL . '/omg-forms/dist/frontend.bundle.js', array(), OMG_FORMS_VERSION, true );
 
 	wp_localize_script(
 		'omg-js',

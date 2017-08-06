@@ -3,9 +3,15 @@
 if ( !defined( 'OMG_FORMS_DIR' ) ) {
 	define( 'OMG_FORMS_DIR', dirname( __FILE__ ) );
 }
+
+if ( !defined( 'OMG_FORMS_URL' ) ) {
+	define( 'OMG_FORMS_URL', get_stylesheet_directory_uri() . '/vendor' );
+}
+
 if ( !defined( 'OMG_FORMS_FILE' ) ) {
 	define( 'OMG_FORMS_FILE', __FILE__ );
 }
+
 if ( !defined( 'OMG_FORMS_VERSION' ) ) {
 	define( 'OMG_FORMS_VERSION', '0.0.1' );
 }

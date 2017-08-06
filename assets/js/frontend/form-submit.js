@@ -12,6 +12,7 @@ export default function() {
       e.preventDefault();
 
       const data = new FormData( form );
+      data.append( 'formId', form.getAttribute( 'id' ) );
 
       submitForm( data )
         .then( (response) => {
@@ -21,13 +22,6 @@ export default function() {
           console.log(error);
         });
     } );
-    // button.addEventListener( 'click', (e) => {
-    //   e.preventDefault();
-    //
-    //   const data = getFormData( button );
-    //   console.log( data );
-
-    // } );
   } );
 }
 

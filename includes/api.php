@@ -17,17 +17,23 @@ class OMG_Entries_Controller extends \WP_REST_Posts_Controller {
 
 	public function create_item( $request ) {
 		$parameters = $request->get_params();
+		$parameters = $this->format_params( $parameters );
+
+		if ( is_wp_error( $parameters ) ) {
+			return $parameters;
+		}
+
 		$form = Core\get_form( $parameters['form'] );
 
 		if ( empty( $form ) ) {
 			return new \WP_Error(
 				'omg_form_validation_fail',
-				'That is not a valid form.',
+				'This is not a valid form id.',
 				array( 'status' => 400 )
 			);
 		}
 
-		$required = $this->check_required_forms( $parameters['fields'] );
+		$required = $this->check_required_forms( $parameters['fields'], $form );
 
 		if ( is_wp_error( $required ) ) {
 			return $required;
@@ -63,9 +69,10 @@ class OMG_Entries_Controller extends \WP_REST_Posts_Controller {
 	}
 
 	protected function check_required_forms( $fields ) {
-		$validation = array_reduce( $fields, function( $acc, $field ) {
-			if ( true === (bool) absint( $field[ 'required' ] ) && empty( $field[ 'value' ] ) ) {
-				$acc = array_merge( $acc, [ $field[ 'name' ] ] );
+		$validation = array_reduce( array_keys( $fields ), function( $acc, $field ) use( $fields, $form ) {
+			$form_field = Core\get_field( $form['name'], str_replace( 'omg-forms-', '', $field ) );
+			if ( true === $form_field['required'] && empty( $fields[ $field] ) ) {
+				$acc = array_merge( $acc, [ $field ] );
 			}
 			return $acc;
 		}, [] );
@@ -113,5 +120,23 @@ class OMG_Entries_Controller extends \WP_REST_Posts_Controller {
 
 	protected function set_form_relationship( $entry_id, $form ) {
 		wp_set_object_terms( $entry_id, $form->term_id, IA\get_tax_forms() );
+	}
+
+	protected function format_params( $params ) {
+		if ( ! isset( $params['formId'] ) || empty( $params['formId'] ) ) {
+			return new \WP_Error(
+				'omg_form_validation_fail',
+				'You must pass the form id as part of your FormData.',
+				array( 'status' => 400 )
+			);
+		}
+
+		$form = $params['formId'];
+		unset( $params['formId'] );
+
+		return [
+			'form' => $form,
+			'fields' => $params
+		];
 	}
 }
