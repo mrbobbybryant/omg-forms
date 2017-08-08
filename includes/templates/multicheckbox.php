@@ -1,4 +1,4 @@
-<?php $checkbox_name = sprintf( '%[]', $name ); ?>
+<?php $checkbox_name = $name . '[]'; ?>
 <fieldset>
 	<legend><?php echo esc_html( $label ); ?></legend>
 	<?php foreach( $options as $option ) : ?>

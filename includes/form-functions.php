@@ -25,7 +25,7 @@ function display_form( $slug ) {
 
 	ob_start(); ?>
 
-    <form action="" id="<?php echo esc_attr( $args['ID'] ) ?>">
+    <form action="" id="<?php echo esc_attr( $args['name'] ) ?>">
 		<?php foreach( $args['fields'] as $field ) :
 			echo get_field_template( Template\get_template_name( $field[ 'type' ] ), $field );
 		endforeach;
@@ -96,9 +96,9 @@ function get_field( $form, $field_name ) {
         return false;
     }
 
-    $field = array_filter( $omg_forms[ $form ]['fields'], function( $field ) use ( $field_name ) {
+    $field = array_values( array_filter( $omg_forms[ $form ]['fields'], function( $field ) use ( $field_name ) {
         return $field_name === $field['slug'];
-    } );
+    } ) );
 
     return ! empty( $field ) ? $field[0] : false;
 

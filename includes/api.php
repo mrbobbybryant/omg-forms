@@ -43,8 +43,8 @@ class OMG_Entries_Controller extends \WP_REST_Posts_Controller {
 
 		$data = apply_filters( 'omg_forms_sanitize_data', $data, $parameters['form'] );
 
-		if ( is_wp_error( $form ) ) {
-			return $form;
+		if ( is_wp_error( $data ) ) {
+			return $data;
 		}
 
 		$entry_id = wp_insert_post( [
@@ -60,7 +60,7 @@ class OMG_Entries_Controller extends \WP_REST_Posts_Controller {
 		/**
 		 * Update entry title to be a concatenation of Form Name and Entry post_id
 		 */
-		wp_update_post( $entry_id, [ 'post_title' => sprintf( '%s: %d' ), Core\get_form_name( $parameters['form'] ), $entry_id ] );
+		wp_update_post( [ 'ID' => $entry_id, 'post_title' => sprintf( '%s: %d', Core\get_form_name( $parameters['form'] ), $entry_id ) ] );
 
 		$this->save_field_data( $entry_id, $data );
 		$this->set_form_relationship( $entry_id, $form );
@@ -68,10 +68,10 @@ class OMG_Entries_Controller extends \WP_REST_Posts_Controller {
 		return true;
 	}
 
-	protected function check_required_forms( $fields ) {
+	protected function check_required_forms( $fields, $form ) {
 		$validation = array_reduce( array_keys( $fields ), function( $acc, $field ) use( $fields, $form ) {
-			$form_field = Core\get_field( $form['name'], str_replace( 'omg-forms-', '', $field ) );
-			if ( true === $form_field['required'] && empty( $fields[ $field] ) ) {
+			$form_field = Core\get_field( $form['name'], $this->normalize_field_name( $field ) );
+			if ( isset( $form_field['required'] ) && true === $form_field['required'] && empty( $fields[ $field] ) ) {
 				$acc = array_merge( $acc, [ $field ] );
 			}
 			return $acc;
@@ -86,17 +86,37 @@ class OMG_Entries_Controller extends \WP_REST_Posts_Controller {
 	}
 
 	protected function sanitize_form_data( $fields, $form ) {
-		return array_map( function ( $field ) use ( $form ) {
-			if ( isset( $form[ 'fields' ][ $field[ 'name' ] ][ 'sanitize_cb' ] ) ) {
-				$sanitize = $form[ 'fields' ][ $field[ 'name' ] ][ 'sanitize_cb' ];
-			} else {
-				$sanitize = $this->get_field_sanitize_type( $field['type'] );
+		return array_reduce( array_keys( $fields ), function ( $acc, $field ) use ( $form , $fields) {
+			$form_field = Core\get_field( $form['name'], $this->normalize_field_name( $field ) );
+
+			if ( empty( $form_field ) ) {
+				return $acc;
 			}
 
-			$field['value'] = call_user_func_array( $sanitize, [ $field['value'] ] );
+			$sanitize = $this->get_sanitization_cb( $form_field );
 
-			return $field;
-		}, $fields );
+			if ( is_array( $fields[ $field ] ) ) {
+				/**
+				 * Since this field is an array of values we need to loop over and sanitize them each.
+				 */
+				$acc[ $field ] = array_map( function( $item ) use ( $sanitize ) {
+					return call_user_func_array( $sanitize, [ $item ] );
+				}, $fields[ $field ] );
+			} else {
+				$acc[ $field ] = call_user_func_array( $sanitize, [ $fields[ $field ] ] );
+			}
+
+			return $acc;
+
+		}, [] );
+	}
+
+	protected function get_sanitization_cb( $form_field ) {
+		if ( isset( $form_field['sanitize_cb'] ) ) {
+			return $form_field[ 'sanitize_cb' ];
+		} else {
+			return $this->get_field_sanitize_type( $form_field['type'] );
+		}
 	}
 
 	protected function get_field_sanitize_type( $type ) {
@@ -112,14 +132,18 @@ class OMG_Entries_Controller extends \WP_REST_Posts_Controller {
 		}
 	}
 
+	protected function normalize_field_name( $field ) {
+		return str_replace( 'omg-forms-', '', $field );
+	}
+
 	protected function save_field_data( $entry_id , $data ) {
-		foreach( $data as $field ) {
-			update_post_meta( $entry_id, $field['name'], $field['value'] );
+		foreach( $data as $key => $value ) {
+			update_post_meta( $entry_id, $key, $value );
 		}
 	}
 
 	protected function set_form_relationship( $entry_id, $form ) {
-		wp_set_object_terms( $entry_id, $form->term_id, IA\get_tax_forms() );
+		wp_set_object_terms( $entry_id, $form['ID'], IA\get_tax_forms() );
 	}
 
 	protected function format_params( $params ) {

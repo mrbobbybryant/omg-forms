@@ -106,6 +106,7 @@ exports.default = function () {
       e.preventDefault();
 
       var data = new FormData(form);
+      data.append('formId', form.getAttribute('id'));
 
       submitForm(data).then(function (response) {
         console.log(response);
@@ -113,13 +114,6 @@ exports.default = function () {
         console.log(error);
       });
     });
-    // button.addEventListener( 'click', (e) => {
-    //   e.preventDefault();
-    //
-    //   const data = getFormData( button );
-    //   console.log( data );
-
-    // } );
   });
 };
 
