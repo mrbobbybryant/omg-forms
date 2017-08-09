@@ -28,6 +28,8 @@ function get_template_part( $name, $args ) {
 		return false;
 	}
 
+	$args['error'] = format_template_error_message( $args );
+
 	if ( is_array( $args ) ){
 		extract( $args );
 	}
@@ -39,4 +41,14 @@ function get_template_part( $name, $args ) {
 
 function get_template_name( $field_type ) {
 	return sprintf( '%s.php', $field_type );
+}
+
+function format_template_error_message( $args ) {
+	if ( isset( $args['error_message'] ) ) {
+		return $args['error_message'];
+	} else if ( isset( $args['required'] ) && true === $args['required'] ) {
+		return 'This field is required.';
+	} else {
+		return '';
+	}
 }

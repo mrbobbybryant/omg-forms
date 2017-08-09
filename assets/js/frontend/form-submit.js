@@ -1,3 +1,5 @@
+import formErrors from './form-errors';
+
 export default function() {
   const formButtons = document.querySelectorAll( '.omg-form-submit-btn' );
 
@@ -16,10 +18,13 @@ export default function() {
 
       submitForm( data )
         .then( (response) => {
+          if ( 'omg_form_validation_fail' === response.code ) {
+            formErrors( response.data.fields );
+          }
           console.log(response);
         })
         .catch( ( error) => {
-          console.log(error);
+          console.warn( error );
         });
     } );
   } );

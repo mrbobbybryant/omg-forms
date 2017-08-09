@@ -75,6 +75,10 @@ var _formSubmit = __webpack_require__(2);
 
 var _formSubmit2 = _interopRequireDefault(_formSubmit);
 
+var _index = __webpack_require__(4);
+
+var _index2 = _interopRequireDefault(_index);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -109,13 +113,22 @@ exports.default = function () {
       data.append('formId', form.getAttribute('id'));
 
       submitForm(data).then(function (response) {
+        if ('omg_form_validation_fail' === response.code) {
+          (0, _formErrors2.default)(response.data.fields);
+        }
         console.log(response);
       }).catch(function (error) {
-        console.log(error);
+        console.warn(error);
       });
     });
   });
 };
+
+var _formErrors = __webpack_require__(3);
+
+var _formErrors2 = _interopRequireDefault(_formErrors);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var getFormElements = function getFormElements(button) {
   var form = button.closest('form');
@@ -178,6 +191,37 @@ var submitForm = function submitForm(data) {
     xhr.send(data);
   });
 };
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+exports.default = function (errors) {
+  var fields = errors.map(function (error) {
+    return document.getElementById(error);
+  });
+
+  if (0 === fields.length) {
+    return false;
+  }
+  console.log(fields);
+  fields.forEach(function (field) {
+    return field.classList.add('show');
+  });
+};
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
 
 /***/ })
 /******/ ]);

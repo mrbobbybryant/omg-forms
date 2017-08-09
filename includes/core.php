@@ -3,6 +3,7 @@ namespace OMGForms\Core;
 
 function setup() {
 	add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\scripts' );
+	add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\styles' );
 }
 
 function scripts() {
@@ -16,4 +17,8 @@ function scripts() {
 			'baseURL'	=>	site_url()
 		]
 	);
+}
+
+function styles() {
+	wp_enqueue_style( 'omg-css', OMG_FORMS_URL . '/omg-forms/dist/frontend.bundle.css', array(), OMG_FORMS_VERSION );
 }

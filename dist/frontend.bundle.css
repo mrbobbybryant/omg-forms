@@ -1,0 +1,8 @@
+.omg-form .omg-error {
+    display: none;
+}
+.omg-form label.show .omg-error {
+    display: inline-block;
+}
+
+/*# sourceMappingURL=frontend.bundle.css.map*/

@@ -1,0 +1,11 @@
+.omg-form {
+  & .omg-error {
+    display: none;
+  }
+
+  & label.show {
+    & .omg-error {
+      display: inline-block;
+    }
+  }
+}
