@@ -75,7 +75,7 @@ var _formSubmit = __webpack_require__(2);
 
 var _formSubmit2 = _interopRequireDefault(_formSubmit);
 
-var _index = __webpack_require__(4);
+var _index = __webpack_require__(5);
 
 var _index2 = _interopRequireDefault(_index);
 
@@ -119,7 +119,7 @@ exports.default = function () {
         }
 
         if (true === response) {
-          (0, _formSuccess2.default)(formWrapper);
+          (0, _formSuccess2.default)(formWrapper, form);
         }
         console.log(response);
       }).catch(function (error) {
@@ -133,7 +133,7 @@ var _formErrors = __webpack_require__(3);
 
 var _formErrors2 = _interopRequireDefault(_formErrors);
 
-var _formSuccess = __webpack_require__(5);
+var _formSuccess = __webpack_require__(4);
 
 var _formSuccess2 = _interopRequireDefault(_formSuccess);
 
@@ -228,12 +228,6 @@ exports.default = function (errors) {
 
 /***/ }),
 /* 4 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -243,10 +237,11 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-exports.default = function (wrapper) {
+exports.default = function (wrapper, form) {
   var successMessage = wrapper.querySelector('.omg-success');
 
   if (successMessage) {
+    form.classList.add('show');
     successMessage.classList.add('show');
     return;
   }
@@ -257,6 +252,12 @@ exports.default = function (wrapper) {
     window.location = redirect;
   }
 };
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
 
 /***/ })
 /******/ ]);

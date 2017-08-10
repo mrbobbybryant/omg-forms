@@ -25,7 +25,7 @@ export default function() {
           }
 
           if ( true === response ) {
-            formSuccess( formWrapper );
+            formSuccess( formWrapper, form );
           }
           console.log(response);
         })

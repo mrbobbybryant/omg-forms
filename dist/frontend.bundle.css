@@ -13,6 +13,11 @@
     display: none;
 }
 
+.omg-form-wrapper form.show {
+
+    display: none;
+}
+
 .omg-form-wrapper .omg-success.show {
 
     display: block;
