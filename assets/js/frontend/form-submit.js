@@ -1,4 +1,5 @@
 import formErrors from './form-errors';
+import formSuccess from './form-success';
 
 export default function() {
   const formButtons = document.querySelectorAll( '.omg-form-submit-btn' );
@@ -9,6 +10,7 @@ export default function() {
 
   [].forEach.call( formButtons, ( button ) => {
     const form = button.closest( 'form' );
+    const formWrapper = button.closest( '.omg-form-wrapper' );
 
     form.addEventListener( 'submit', (e) => {
       e.preventDefault();
@@ -20,6 +22,10 @@ export default function() {
         .then( (response) => {
           if ( 'omg_form_validation_fail' === response.code ) {
             formErrors( response.data.fields );
+          }
+
+          if ( true === response ) {
+            formSuccess( formWrapper );
           }
           console.log(response);
         })

@@ -105,6 +105,7 @@ exports.default = function () {
 
   [].forEach.call(formButtons, function (button) {
     var form = button.closest('form');
+    var formWrapper = button.closest('.omg-form-wrapper');
 
     form.addEventListener('submit', function (e) {
       e.preventDefault();
@@ -115,6 +116,10 @@ exports.default = function () {
       submitForm(data).then(function (response) {
         if ('omg_form_validation_fail' === response.code) {
           (0, _formErrors2.default)(response.data.fields);
+        }
+
+        if (true === response) {
+          (0, _formSuccess2.default)(formWrapper);
         }
         console.log(response);
       }).catch(function (error) {
@@ -127,6 +132,10 @@ exports.default = function () {
 var _formErrors = __webpack_require__(3);
 
 var _formErrors2 = _interopRequireDefault(_formErrors);
+
+var _formSuccess = __webpack_require__(5);
+
+var _formSuccess2 = _interopRequireDefault(_formSuccess);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -222,6 +231,32 @@ exports.default = function (errors) {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+exports.default = function (wrapper) {
+  var successMessage = wrapper.querySelector('.omg-success');
+
+  if (successMessage) {
+    successMessage.classList.add('show');
+    return;
+  }
+
+  var redirect = wrapper.dataset.redirect;
+
+  if (redirect) {
+    window.location = redirect;
+  }
+};
 
 /***/ })
 /******/ ]);

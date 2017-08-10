@@ -1,8 +1,21 @@
 .omg-form .omg-error {
+
     display: none;
 }
+
 .omg-form label.show .omg-error {
+
     display: inline-block;
+}
+
+.omg-form-wrapper .omg-success {
+
+    display: none;
+}
+
+.omg-form-wrapper .omg-success.show {
+
+    display: block;
 }
 
 /*# sourceMappingURL=frontend.bundle.css.map*/

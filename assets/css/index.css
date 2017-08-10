@@ -9,3 +9,14 @@
     }
   }
 }
+
+.omg-form-wrapper {
+  & .omg-success {
+    display: none;
+  }
+
+  & .omg-success.show {
+    display: block;
+  }
+
+}

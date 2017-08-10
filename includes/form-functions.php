@@ -3,10 +3,19 @@ namespace OMGForms\Core;
 
 use OMGForms\Template;
 use OMGForms\IA;
+use OMGForms\Helpers;
 
 function register_form( $args ) {
 	global $omg_forms;
 
+	/**
+	 * Checks the submitted args to ensure they will result in a valid OMG Form.
+	 */
+	Helpers\validate_form_options( $args );
+
+	/**
+	 * Ensures our global variable is an array, since on startup it will not.
+	 */
 	if ( ! is_array( $omg_forms ) ) {
 		$omg_forms = array();
 	}
@@ -23,14 +32,23 @@ function display_form( $slug ) {
         return false;
     }
 
-	ob_start(); ?>
+    $redirect = Helpers\get_redirect_attribute( $args );
 
-    <form class="omg-form" action="" id="<?php echo esc_attr( $args['name'] ) ?>">
-		<?php foreach( $args['fields'] as $field ) :
-			echo get_field_template( Template\get_template_name( $field[ 'type' ] ), $field );
-		endforeach;
-		echo get_field_template( Template\get_template_name( 'submit' ), [] ); ?>
-    </form>
+	ob_start(); ?>
+    <div class="omg-form-wrapper" <?php echo esc_attr( $redirect ); ?>>
+        <?php if ( isset( $args['success_message'] ) ) : ?>
+         <p class="omg-success">
+             <?php echo esc_html( $args['success_message'] ) ?>
+         </p>
+        <?php endif; ?>
+        <form class="omg-form" action="" id="<?php echo esc_attr( $args['name'] ) ?>">
+		    <?php foreach( $args['fields'] as $field ) :
+			    echo get_field_template( Template\get_template_name( $field[ 'type' ] ), $field );
+		    endforeach;
+		    echo get_field_template( Template\get_template_name( 'submit' ), [] ); ?>
+        </form>
+    </div>
+
 
 	<?php return ob_get_clean();
 }
