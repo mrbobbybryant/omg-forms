@@ -21,8 +21,6 @@ I believe:
 If that is the case, then why wouldn't I use a forms solution that puts the developer experience first? That is where OMG Forms comes into play.
 
 ## Roadmap
-  - Handle error Messages in default form field.
-  - Handle showing success messages and redirect on success.
   - Setup Conditional Logic for Fields
   - Show submission data in admin view.
   - Setup Email notifications whenever a form is submitted.
