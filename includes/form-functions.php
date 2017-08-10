@@ -36,6 +36,9 @@ function display_form( $slug ) {
 
 	ob_start(); ?>
     <div class="omg-form-wrapper" <?php echo esc_attr( $redirect ); ?>>
+
+        <?php do_action( 'omg_form_before_form' ); ?>
+
         <?php if ( isset( $args['success_message'] ) ) : ?>
          <p class="omg-success">
              <?php echo esc_html( $args['success_message'] ) ?>
@@ -45,8 +48,12 @@ function display_form( $slug ) {
 		    <?php foreach( $args['fields'] as $field ) :
 			    echo get_field_template( Template\get_template_name( $field[ 'type' ] ), $field );
 		    endforeach;
+
+		    do_action( 'omg_form_before_form_submit' );
+
 		    echo get_field_template( Template\get_template_name( 'submit' ), [] ); ?>
         </form>
+        <?php do_action( 'omg_form_after_form' ); ?>
     </div>
 
 
