@@ -235,7 +235,12 @@ exports.default = function (errors) {
   }
 
   fields.forEach(function (field) {
-    return field.classList.add('show');
+    field.classList.add('show');
+    field.addEventListener('keyup', function (e) {
+      if (e.target.value) {
+        field.classList.remove('show');
+      }
+    });
   });
 };
 

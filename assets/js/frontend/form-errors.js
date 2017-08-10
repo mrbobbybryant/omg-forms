@@ -5,5 +5,13 @@ export default function( errors ) {
     return false;
   }
 
-  fields.forEach( ( field ) => field.classList.add( 'show' ) );
+  fields.forEach( ( field ) => {
+    field.classList.add( 'show' );
+    field.addEventListener( 'keyup', (e) => {
+      if ( e.target.value ) {
+        field.classList.remove( 'show' );
+      }
+    } );
+  } );
+
 }
