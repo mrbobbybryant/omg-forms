@@ -79,10 +79,15 @@ var _index = __webpack_require__(5);
 
 var _index2 = _interopRequireDefault(_index);
 
+var _formEvents = __webpack_require__(6);
+
+var _formEvents2 = _interopRequireDefault(_formEvents);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 document.addEventListener('DOMContentLoaded', function () {
-  (0, _formSubmit2.default)();
+  window.omg_events = _formEvents2.default;
+  (0, _formSubmit2.default)(window.omg_events);
 });
 
 /***/ }),
@@ -96,7 +101,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-exports.default = function () {
+exports.default = function (Events) {
   var formButtons = document.querySelectorAll('.omg-form-submit-btn');
 
   if (!formButtons || 0 === formButtons.length) {
@@ -116,12 +121,20 @@ exports.default = function () {
       submitForm(data).then(function (response) {
         if ('omg_form_validation_fail' === response.code) {
           (0, _formErrors2.default)(response.data.fields);
+          Events.emit('omg-form-field-errors', {
+            fields: response.data.fields,
+            formWrapper: formWrapper,
+            form: form
+          });
         }
 
         if (true === response) {
           (0, _formSuccess2.default)(formWrapper, form);
+          Events.emit('omg-form-success', {
+            formWrapper: formWrapper,
+            form: form
+          });
         }
-        console.log(response);
       }).catch(function (error) {
         console.warn(error);
       });
@@ -220,7 +233,7 @@ exports.default = function (errors) {
   if (0 === fields.length) {
     return false;
   }
-  console.log(fields);
+
   fields.forEach(function (field) {
     return field.classList.add('show');
   });
@@ -258,6 +271,38 @@ exports.default = function (wrapper, form) {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = {
+  events: {},
+  subscribe: function subscribe(eventName, fn) {
+    this.events[eventName] = this.events[eventName] || [];
+    this.events[eventName].push(fn);
+  },
+  unsubscribe: function unsubscribe(eventName, fn) {
+    if (this.events[eventName]) {
+      this.events[eventName] = this.events[eventName].filter(function (eventFn) {
+        return eventFn !== fn;
+      });
+    }
+  },
+  emit: function emit(eventName, data) {
+    if (this.events[eventName]) {
+      this.events[eventName].forEach(function (fn) {
+        fn(data);
+      });
+    }
+  }
+};
 
 /***/ })
 /******/ ]);

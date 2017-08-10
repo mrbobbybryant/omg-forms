@@ -4,6 +4,6 @@ export default function( errors ) {
   if ( 0 === fields.length ) {
     return false;
   }
-  console.log( fields )
+
   fields.forEach( ( field ) => field.classList.add( 'show' ) );
 }

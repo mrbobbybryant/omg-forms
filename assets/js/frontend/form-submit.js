@@ -1,7 +1,7 @@
 import formErrors from './form-errors';
 import formSuccess from './form-success';
 
-export default function() {
+export default function( Events ) {
   const formButtons = document.querySelectorAll( '.omg-form-submit-btn' );
 
   if ( ! formButtons || 0 === formButtons.length ) {
@@ -22,12 +22,20 @@ export default function() {
         .then( (response) => {
           if ( 'omg_form_validation_fail' === response.code ) {
             formErrors( response.data.fields );
+            Events.emit( 'omg-form-field-errors', {
+              fields: response.data.fields,
+              formWrapper: formWrapper,
+              form: form
+            } );
           }
 
           if ( true === response ) {
             formSuccess( formWrapper, form );
+            Events.emit( 'omg-form-success', {
+              formWrapper: formWrapper,
+              form: form
+            } );
           }
-          console.log(response);
         })
         .catch( ( error) => {
           console.warn( error );
