@@ -65,6 +65,10 @@ class OMG_Entries_Controller extends \WP_REST_Posts_Controller {
 		$this->save_field_data( $entry_id, $data );
 		$this->set_form_relationship( $entry_id, $form );
 
+		if ( isset( $form[ 'email' ] ) && ! empty( $form[ 'email' ] ) ) {
+			$this->send_email( $form, $entry_id );
+		}
+
 		return true;
 	}
 
@@ -127,6 +131,8 @@ class OMG_Entries_Controller extends \WP_REST_Posts_Controller {
 				return 'sanitize_email';
 			case 'textarea':
 				return 'wp_kses_post';
+			case 'number':
+				return 'absint';
 			default:
 				return 'sanitize_text_field';
 		}
@@ -134,6 +140,10 @@ class OMG_Entries_Controller extends \WP_REST_Posts_Controller {
 
 	protected function normalize_field_name( $field ) {
 		return str_replace( 'omg-forms-', '', $field );
+	}
+
+	protected function sanitize_phone( $value ) {
+		return preg_match( '%^[+]?[0-9()/ -]*$%', $value );
 	}
 
 	protected function save_field_data( $entry_id , $data ) {
@@ -162,5 +172,27 @@ class OMG_Entries_Controller extends \WP_REST_Posts_Controller {
 			'form' => $form,
 			'fields' => $params
 		];
+	}
+
+	protected function send_email( $form, $entry_id ) {
+		$to      = $form['email_to'];
+		$headers = array(
+			'From: ' . get_bloginfo( 'admin_email' )
+		);
+		$subject = sprintf( '%s Submission Notification.', Core\get_form_name( $form['name'] ) );
+
+		$message = 'Hello' . "\r\n\r\n";
+		$message .= 'We have received a new form submission on ' . site_url() . ".\r\n\r\n";
+		$message .= 'Please login to view this form submission.';
+
+		$subject = apply_filters( 'omg_form_submitted_subject', $subject, $form, $entry_id );
+		$headers = apply_filters( 'omg_form_submitted_headers', $headers, $form, $entry_id );
+		$message = apply_filters( 'omg_form_submitted_message', $message, $form, $entry_id );
+
+		$sent = wp_mail( $to, $subject, $message, $headers );
+
+		if ( false === $sent ) {
+			error_log( 'Email failed to send for entry ' . $entry_id );
+		}
 	}
 }

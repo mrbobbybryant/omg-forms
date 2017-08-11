@@ -11,7 +11,7 @@ It is my assumption that these plugins have this issue because they were built f
 
 But this really highlights the fact that on day one, these plugins were not built for developers. They were built for power users.
 
-## Intorducing OMG Forms
+## Introducing OMG Forms
 That is where OMG Forms comes into play. It was built from day one to be for developers and developers only. But how can that be? Don't you need to make it for Power Users? Nope. 
 I believe:
   - 90% of user only need one or two forms.
