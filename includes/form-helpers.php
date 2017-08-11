@@ -12,4 +12,8 @@ function validate_form_options( $args ) {
 		throw new \Exception( 'You provided both a redirect_url and a success_message. You can only have one of these per form.' );
 	}
 
+	if( ! isset( $args['fields'] ) ) {
+		throw new \Exception( 'You must provide at least one field for this to be a valid form.' );
+	}
+
 }

@@ -28,8 +28,12 @@ function register_form( $args ) {
 function display_form( $slug ) {
     $args = get_form( $slug );
 
-		if ( empty( $args ) || ! isset( $args[ 'fields' ] ) ) {
-        return false;
+    if ( empty( $args ) ) {
+        throw new \Exception( 'A form with that name does not exist.' );
+    }
+
+    if ( ! isset( $args[ 'fields' ] ) ) {
+	    throw new \Exception( 'You must register at least of field for a form to be valid.' );
     }
 
     $redirect = Helpers\get_redirect_attribute( $args );
