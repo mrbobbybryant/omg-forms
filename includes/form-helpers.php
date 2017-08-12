@@ -30,31 +30,8 @@ function validate_form_options( $args ) {
 
 }
 
-function validate_form_fields( $fields ) {
-	foreach( $fields as $field ) {
-		if ( ! isset( $field[ 'slug' ] ) || ! isset( $field[ 'label' ] ) || ! isset( $field[ 'type' ] ) ) {
-			throw new \Exception( 'Invalid field. A field must have at least a slug, label, and type.' );
-        }
-	}
-}
-
-function format_field( $field ) {
-
-	if ( empty( $field ) ) {
-		return false;
-	}
-
-	$field[ 'name' ] = sprintf( 'omg-forms-%s', $field[ 'slug' ]  );
-
-	if ( ! isset( $field[ 'required' ] ) ) {
-		$field[ 'required' ] = false;
-	}
-
-	if ( ! isset( $field[ 'placeholder' ] ) ) {
-		$field[ 'placeholder' ] = '';
-	}
-
-	return $field;
+function get_form_name( $slug ) {
+	return str_replace( '-', ' ', $slug );
 }
 
 function maybe_required( $required ) {

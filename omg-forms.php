@@ -20,6 +20,7 @@ require_once OMG_FORMS_DIR . '/includes/core.php';
 require_once OMG_FORMS_DIR . '/includes/information-architecture/index.php';
 require_once OMG_FORMS_DIR . '/includes/api.php';
 require_once OMG_FORMS_DIR . '/includes/form-functions.php';
+require_once OMG_FORMS_DIR . '/includes/field-functions.php';
 require_once OMG_FORMS_DIR . '/includes/template.php';
 require_once OMG_FORMS_DIR . '/includes/form-helpers.php';
 

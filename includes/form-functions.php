@@ -13,7 +13,7 @@ function register_form( $args ) {
 	 */
 	Helpers\validate_form_options( $args );
 
-	Helpers\validate_form_fields( $args[ 'fields' ] );
+	validate_form_fields( $args[ 'fields' ] );
 	/**
 	 * Ensures our global variable is an array, since on startup it will not.
 	 */
@@ -81,7 +81,7 @@ function get_form( $slug ) {
 }
 
 function create_form( $slug ) {
-	$name = get_form_name( $slug );
+	$name = Helpers\get_form_name( $slug );
 
 	/**
 	 * Check to see if this form already exists. If it does, then just return the existing
@@ -103,26 +103,4 @@ function create_form( $slug ) {
     return $form['term_id'];
 }
 
-function get_form_name( $slug ) {
-	return str_replace( '-', ' ', $slug );
-}
 
-function get_field( $form, $field_name ) {
-    global $omg_forms;
-
-    if ( ! isset( $omg_forms[ $form ] ) || empty( $omg_forms[ $form ]['fields'] ) ) {
-        return false;
-    }
-
-    $field = array_values( array_filter( $omg_forms[ $form ]['fields'], function( $field ) use ( $field_name ) {
-        return $field_name === $field['slug'];
-    } ) );
-
-    return ! empty( $field ) ? $field[0] : false;
-
-}
-
-function get_field_template( $field_type, $settings ) {
-    $field_settings = Helpers\format_field( $settings );
-	return Template\get_template_part( $field_type, $field_settings );
-}
