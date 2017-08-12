@@ -13,6 +13,7 @@ function register_form( $args ) {
 	 */
 	Helpers\validate_form_options( $args );
 
+	Helpers\validate_form_fields( $args[ 'fields' ] );
 	/**
 	 * Ensures our global variable is an array, since on startup it will not.
 	 */
@@ -106,25 +107,6 @@ function get_form_name( $slug ) {
 	return str_replace( '-', ' ', $slug );
 }
 
-function format_field( $field ) {
-
-    if ( empty( $field ) ) {
-        return false;
-    }
-
-	$field[ 'name' ] = sprintf( 'omg-forms-%s', $field[ 'slug' ]  );
-
-    if ( ! isset( $field[ 'required' ] ) ) {
-	    $field[ 'required' ] = false;
-    }
-
-    if ( ! isset( $field[ 'placeholder' ] ) ) {
-	    $field[ 'placeholder' ] = '';
-    }
-
-	return $field;
-}
-
 function get_field( $form, $field_name ) {
     global $omg_forms;
 
@@ -141,6 +123,6 @@ function get_field( $form, $field_name ) {
 }
 
 function get_field_template( $field_type, $settings ) {
-    $field_settings = format_field( $settings );
+    $field_settings = Helpers\format_field( $settings );
 	return Template\get_template_part( $field_type, $field_settings );
 }
