@@ -1,5 +1,9 @@
 <label id="<?php echo esc_attr( $name ); ?>">
     <span class="omg-error"><?php echo esc_html( $error ); ?></span>
 	<?php echo esc_html( $label ); ?>
-	<input type="email" name="<?php echo esc_attr( $name ) ?>" />
+	<input
+        type="email"
+        name="<?php echo esc_attr( $name ) ?>"
+        placeholder="<?php echo esc_html( $placeholder ); ?>"
+        <?php echo \OMGForms\Helpers\maybe_required( $required ); ?> />
 </label>

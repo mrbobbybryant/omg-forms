@@ -4,7 +4,11 @@
     <?php foreach( $options as $option ) : ?>
         <label>
             <?php echo esc_html( $option['label'] ); ?>
-            <input type="radio" name="<?php echo esc_attr( $name ); ?>" value="<?php echo esc_attr( $option['value'] ) ?>" />
+            <input
+                type="radio"
+                name="<?php echo esc_attr( $name ); ?>"
+                value="<?php echo esc_attr( $option['value'] ) ?>"
+	            <?php echo \OMGForms\Helpers\maybe_required( $required ); ?> />
         </label>
     <?php endforeach ?>
 </fieldset>

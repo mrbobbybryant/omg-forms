@@ -8,6 +8,10 @@ function get_redirect_attribute( $args ) {
 }
 
 function validate_form_options( $args ) {
+	if ( ! isset( $args['name'] ) ) {
+		throw new \Exception( 'You must provide a form name for this to be a valid form.' );
+	}
+
 	if ( isset( $args['redirect_url'] ) && isset( $args['success_message'] ) ) {
 		throw new \Exception( 'You provided both a redirect_url and a success_message. You can only have one of these per form.' );
 	}
@@ -16,4 +20,16 @@ function validate_form_options( $args ) {
 		throw new \Exception( 'You must provide at least one field for this to be a valid form.' );
 	}
 
+	if ( isset( $args['email'] ) && true === $args['email'] && ! isset( $args['email_to'] ) ) {
+		throw new \Exception( 'You must pass an email_to argument in order for email to work.' );
+	}
+
+	if ( isset( $args['email_to'] ) && ! is_email( $args['email_to'] ) ) {
+		throw new \Exception( 'You must provide a valid email address for the email_to argument.' );
+	}
+
+}
+
+function maybe_required( $required ) {
+	return ( ! empty( $required ) ? 'required' : '' );
 }

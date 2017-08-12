@@ -2,7 +2,7 @@
 	<span class="omg-error"><?php echo esc_html( $error ); ?></span>
 	<?php echo esc_html ( $label ); ?>
 	<input
-        type="tel"
+        type="password"
         name="<?php echo esc_attr( $name ) ?>"
         placeholder="<?php echo esc_attr( $placeholder ); ?>"
 		<?php echo \OMGForms\Helpers\maybe_required( $required ); ?> />

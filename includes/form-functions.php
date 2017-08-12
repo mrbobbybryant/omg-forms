@@ -114,6 +114,14 @@ function format_field( $field ) {
 
 	$field[ 'name' ] = sprintf( 'omg-forms-%s', $field[ 'slug' ]  );
 
+    if ( ! isset( $field[ 'required' ] ) ) {
+	    $field[ 'required' ] = false;
+    }
+
+    if ( ! isset( $field[ 'placeholder' ] ) ) {
+	    $field[ 'placeholder' ] = '';
+    }
+
 	return $field;
 }
 
