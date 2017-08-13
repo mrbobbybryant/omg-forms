@@ -75,11 +75,11 @@ var _formSubmit = __webpack_require__(2);
 
 var _formSubmit2 = _interopRequireDefault(_formSubmit);
 
-var _index = __webpack_require__(5);
+var _index = __webpack_require__(3);
 
 var _index2 = _interopRequireDefault(_index);
 
-var _formEvents = __webpack_require__(6);
+var _formEvents = __webpack_require__(4);
 
 var _formEvents2 = _interopRequireDefault(_formEvents);
 
@@ -118,35 +118,29 @@ exports.default = function (Events) {
       var data = new FormData(form);
       data.append('formId', form.getAttribute('id'));
 
-      submitForm(data).then(function (response) {
-        if ('omg_form_validation_fail' === response.code) {
-          (0, _formErrors2.default)(response.data.fields);
-          Events.emit('omg-form-field-errors', {
-            fields: response.data.fields,
-            formWrapper: formWrapper,
-            form: form
-          });
-        }
-
-        if (true === response) {
-          (0, _formSuccess2.default)(formWrapper, form);
-          Events.emit('omg-form-success', {
-            formWrapper: formWrapper,
-            form: form
-          });
-        }
-      }).catch(function (error) {
-        console.warn(error);
-      });
+      if (parseInt(formWrapper.dataset.rest)) {
+        submitForm(data).then(function (response) {
+          handleFormErrors(response, formWrapper, form, Events);
+          handleFormSuccess(response, formWrapper, form, Events);
+        }).catch(function (error) {
+          console.warn(error);
+        });
+      } else {
+        Events.emit('omg-form-submit', {
+          data: data,
+          formWrapper: formWrapper,
+          form: form
+        });
+      }
     });
   });
 };
 
-var _formErrors = __webpack_require__(3);
+var _formErrors = __webpack_require__(5);
 
 var _formErrors2 = _interopRequireDefault(_formErrors);
 
-var _formSuccess = __webpack_require__(4);
+var _formSuccess = __webpack_require__(6);
 
 var _formSuccess2 = _interopRequireDefault(_formSuccess);
 
@@ -189,6 +183,29 @@ var getFieldType = function getFieldType(field) {
   }
 };
 
+var handleFormErrors = function handleFormErrors(response, formWrapper, form, Events) {
+  if ('omg_form_validation_fail' === response.code) {
+    (0, _formErrors2.default)(response.data.fields);
+    Events.emit('omg-form-field-errors', {
+      fields: response.data.fields,
+      formWrapper: formWrapper,
+      form: form
+    });
+  } else {
+    return response;
+  }
+};
+
+var handleFormSuccess = function handleFormSuccess(response, formWrapper, form, Events) {
+  if (true === response) {
+    (0, _formSuccess2.default)(formWrapper, form);
+    Events.emit('omg-form-success', {
+      formWrapper: formWrapper,
+      form: form
+    });
+  }
+};
+
 var submitForm = function submitForm(data) {
   var endpoint = OMGForms.baseURL + '/wp-json/wp/v2/entries';
   return new Promise(function (resolve, reject) {
@@ -216,6 +233,44 @@ var submitForm = function submitForm(data) {
 
 /***/ }),
 /* 3 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = {
+  events: {},
+  subscribe: function subscribe(eventName, fn) {
+    this.events[eventName] = this.events[eventName] || [];
+    this.events[eventName].push(fn);
+  },
+  unsubscribe: function unsubscribe(eventName, fn) {
+    if (this.events[eventName]) {
+      this.events[eventName] = this.events[eventName].filter(function (eventFn) {
+        return eventFn !== fn;
+      });
+    }
+  },
+  emit: function emit(eventName, data) {
+    if (this.events[eventName]) {
+      this.events[eventName].forEach(function (fn) {
+        fn(data);
+      });
+    }
+  }
+};
+
+/***/ }),
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -245,7 +300,7 @@ exports.default = function (errors) {
 };
 
 /***/ }),
-/* 4 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -268,44 +323,6 @@ exports.default = function (wrapper, form) {
 
   if (redirect) {
     window.location = redirect;
-  }
-};
-
-/***/ }),
-/* 5 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 6 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = {
-  events: {},
-  subscribe: function subscribe(eventName, fn) {
-    this.events[eventName] = this.events[eventName] || [];
-    this.events[eventName].push(fn);
-  },
-  unsubscribe: function unsubscribe(eventName, fn) {
-    if (this.events[eventName]) {
-      this.events[eventName] = this.events[eventName].filter(function (eventFn) {
-        return eventFn !== fn;
-      });
-    }
-  },
-  emit: function emit(eventName, data) {
-    if (this.events[eventName]) {
-      this.events[eventName].forEach(function (fn) {
-        fn(data);
-      });
-    }
   }
 };
 

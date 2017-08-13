@@ -47,27 +47,7 @@ class OMG_Entries_Controller extends \WP_REST_Posts_Controller {
 			return $data;
 		}
 
-		$entry_id = wp_insert_post( [
-			'post_title' => sprintf( '%s: Temp', Core\get_form_name( $parameters['form'] ) ),
-			'post_status' => 'publish',
-			'post_type' =>  IA\get_type_entries()
-		], true );
-
-		if ( is_wp_error( $entry_id ) ) {
-			return $entry_id;
-		}
-
-		/**
-		 * Update entry title to be a concatenation of Form Name and Entry post_id
-		 */
-		wp_update_post( [ 'ID' => $entry_id, 'post_title' => sprintf( '%s: %d', Core\get_form_name( $parameters['form'] ), $entry_id ) ] );
-
-		$this->save_field_data( $entry_id, $data );
-		$this->set_form_relationship( $entry_id, $form );
-
-		if ( isset( $form[ 'email' ] ) && ! empty( $form[ 'email' ] ) ) {
-			$this->send_email( $form, $entry_id );
-		}
+		do_action( 'omg_forms_save_data', $data, $form );
 
 		return true;
 	}
@@ -146,16 +126,6 @@ class OMG_Entries_Controller extends \WP_REST_Posts_Controller {
 		return preg_match( '%^[+]?[0-9()/ -]*$%', $value );
 	}
 
-	protected function save_field_data( $entry_id , $data ) {
-		foreach( $data as $key => $value ) {
-			update_post_meta( $entry_id, $key, $value );
-		}
-	}
-
-	protected function set_form_relationship( $entry_id, $form ) {
-		wp_set_object_terms( $entry_id, $form['ID'], IA\get_tax_forms() );
-	}
-
 	protected function format_params( $params ) {
 		if ( ! isset( $params['formId'] ) || empty( $params['formId'] ) ) {
 			return new \WP_Error(
@@ -172,27 +142,5 @@ class OMG_Entries_Controller extends \WP_REST_Posts_Controller {
 			'form' => $form,
 			'fields' => $params
 		];
-	}
-
-	protected function send_email( $form, $entry_id ) {
-		$to      = $form['email_to'];
-		$headers = array(
-			'From: ' . get_bloginfo( 'admin_email' )
-		);
-		$subject = sprintf( '%s Submission Notification.', Core\get_form_name( $form['name'] ) );
-
-		$message = 'Hello' . "\r\n\r\n";
-		$message .= 'We have received a new form submission on ' . site_url() . ".\r\n\r\n";
-		$message .= 'Please login to view this form submission.';
-
-		$subject = apply_filters( 'omg_form_submitted_subject', $subject, $form, $entry_id );
-		$headers = apply_filters( 'omg_form_submitted_headers', $headers, $form, $entry_id );
-		$message = apply_filters( 'omg_form_submitted_message', $message, $form, $entry_id );
-
-		$sent = wp_mail( $to, $subject, $message, $headers );
-
-		if ( false === $sent ) {
-			error_log( 'Email failed to send for entry ' . $entry_id );
-		}
 	}
 }
