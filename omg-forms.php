@@ -24,3 +24,4 @@ require_once OMG_FORMS_DIR . '/includes/template.php';
 require_once OMG_FORMS_DIR . '/includes/form-helpers.php';
 
 \OMGForms\Core\setup();
+\OMGForms\API\setup();

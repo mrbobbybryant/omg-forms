@@ -75,11 +75,11 @@ var _formSubmit = __webpack_require__(2);
 
 var _formSubmit2 = _interopRequireDefault(_formSubmit);
 
-var _index = __webpack_require__(3);
+var _index = __webpack_require__(5);
 
 var _index2 = _interopRequireDefault(_index);
 
-var _formEvents = __webpack_require__(4);
+var _formEvents = __webpack_require__(6);
 
 var _formEvents2 = _interopRequireDefault(_formEvents);
 
@@ -136,11 +136,11 @@ exports.default = function (Events) {
   });
 };
 
-var _formErrors = __webpack_require__(5);
+var _formErrors = __webpack_require__(3);
 
 var _formErrors2 = _interopRequireDefault(_formErrors);
 
-var _formSuccess = __webpack_require__(6);
+var _formSuccess = __webpack_require__(4);
 
 var _formSuccess2 = _interopRequireDefault(_formSuccess);
 
@@ -207,7 +207,7 @@ var handleFormSuccess = function handleFormSuccess(response, formWrapper, form, 
 };
 
 var submitForm = function submitForm(data) {
-  var endpoint = OMGForms.baseURL + '/wp-json/wp/v2/entries';
+  var endpoint = OMGForms.baseURL + '/wp-json/omg/v1/forms';
   return new Promise(function (resolve, reject) {
 
     var xhr = new XMLHttpRequest();
@@ -233,44 +233,6 @@ var submitForm = function submitForm(data) {
 
 /***/ }),
 /* 3 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 4 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = {
-  events: {},
-  subscribe: function subscribe(eventName, fn) {
-    this.events[eventName] = this.events[eventName] || [];
-    this.events[eventName].push(fn);
-  },
-  unsubscribe: function unsubscribe(eventName, fn) {
-    if (this.events[eventName]) {
-      this.events[eventName] = this.events[eventName].filter(function (eventFn) {
-        return eventFn !== fn;
-      });
-    }
-  },
-  emit: function emit(eventName, data) {
-    if (this.events[eventName]) {
-      this.events[eventName].forEach(function (fn) {
-        fn(data);
-      });
-    }
-  }
-};
-
-/***/ }),
-/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -300,7 +262,7 @@ exports.default = function (errors) {
 };
 
 /***/ }),
-/* 6 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -323,6 +285,44 @@ exports.default = function (wrapper, form) {
 
   if (redirect) {
     window.location = redirect;
+  }
+};
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = {
+  events: {},
+  subscribe: function subscribe(eventName, fn) {
+    this.events[eventName] = this.events[eventName] || [];
+    this.events[eventName].push(fn);
+  },
+  unsubscribe: function unsubscribe(eventName, fn) {
+    if (this.events[eventName]) {
+      this.events[eventName] = this.events[eventName].filter(function (eventFn) {
+        return eventFn !== fn;
+      });
+    }
+  },
+  emit: function emit(eventName, data) {
+    if (this.events[eventName]) {
+      this.events[eventName].forEach(function (fn) {
+        fn(data);
+      });
+    }
   }
 };
 

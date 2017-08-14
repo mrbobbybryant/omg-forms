@@ -34,6 +34,8 @@ function validate_form_options( $args ) {
 		throw new \Exception( 'You must provide a valid email address for the email_to argument.' );
 	}
 
+	do_action( 'omg_form_validation', $args );
+
 }
 
 function get_form_name( $slug ) {

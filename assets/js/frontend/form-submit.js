@@ -100,7 +100,7 @@ const handleFormSuccess = ( response, formWrapper, form, Events ) => {
 }
 
 const submitForm = ( data ) => {
-  const endpoint = `${OMGForms.baseURL}/wp-json/wp/v2/entries`;
+  const endpoint = `${OMGForms.baseURL}/wp-json/omg/v1/forms`;
   return new Promise( ( resolve, reject ) => {
 
 		var xhr = new XMLHttpRequest();
