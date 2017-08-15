@@ -36,6 +36,8 @@ function format_field( $field ) {
 		$field[ 'classname' ] = '';
 	}
 
+	$field = apply_filters( 'omg-form-filter-field-args', $field );
+
 	return $field;
 }
 
