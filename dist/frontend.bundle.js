@@ -118,26 +118,20 @@ exports.default = function (Events) {
       var data = new FormData(form);
       data.append('formId', form.getAttribute('id'));
 
-      submitForm(data).then(function (response) {
-        if ('omg_form_validation_fail' === response.code) {
-          (0, _formErrors2.default)(response.data.fields);
-          Events.emit('omg-form-field-errors', {
-            fields: response.data.fields,
-            formWrapper: formWrapper,
-            form: form
-          });
-        }
-
-        if (true === response) {
-          (0, _formSuccess2.default)(formWrapper, form);
-          Events.emit('omg-form-success', {
-            formWrapper: formWrapper,
-            form: form
-          });
-        }
-      }).catch(function (error) {
-        console.warn(error);
-      });
+      if (parseInt(formWrapper.dataset.rest)) {
+        submitForm(data).then(function (response) {
+          handleFormErrors(response, formWrapper, form, Events);
+          handleFormSuccess(response, formWrapper, form, Events);
+        }).catch(function (error) {
+          console.warn(error);
+        });
+      } else {
+        Events.emit('omg-form-submit', {
+          data: data,
+          formWrapper: formWrapper,
+          form: form
+        });
+      }
     });
   });
 };
@@ -189,8 +183,31 @@ var getFieldType = function getFieldType(field) {
   }
 };
 
+var handleFormErrors = function handleFormErrors(response, formWrapper, form, Events) {
+  if ('omg_form_validation_fail' === response.code) {
+    (0, _formErrors2.default)(response.data.fields);
+    Events.emit('omg-form-field-errors', {
+      fields: response.data.fields,
+      formWrapper: formWrapper,
+      form: form
+    });
+  } else {
+    return response;
+  }
+};
+
+var handleFormSuccess = function handleFormSuccess(response, formWrapper, form, Events) {
+  if (true === response) {
+    (0, _formSuccess2.default)(formWrapper, form);
+    Events.emit('omg-form-success', {
+      formWrapper: formWrapper,
+      form: form
+    });
+  }
+};
+
 var submitForm = function submitForm(data) {
-  var endpoint = OMGForms.baseURL + '/wp-json/wp/v2/entries';
+  var endpoint = OMGForms.baseURL + '/wp-json/omg/v1/forms';
   return new Promise(function (resolve, reject) {
 
     var xhr = new XMLHttpRequest();

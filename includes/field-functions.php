@@ -49,3 +49,13 @@ function get_field( $form, $field_name ) {
 	return ! empty( $field ) ? $field[0] : false;
 
 }
+
+function get_fields( $form ) {
+	global $omg_forms;
+
+	if ( empty( $omg_forms ) || ! isset( $omg_forms[ $form ] ) ) {
+		return false;
+	}
+
+	return $omg_forms[ $form ]['fields'];
+}

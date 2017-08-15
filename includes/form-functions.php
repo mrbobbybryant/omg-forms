@@ -8,6 +8,8 @@ use OMGForms\Helpers;
 function register_form( $args ) {
 	global $omg_forms;
 
+	$args = apply_filters( 'omg_form_filter_register_args', $args );
+
 	/**
 	 * Checks the submitted args to ensure they will result in a valid OMG Form.
 	 */
@@ -21,9 +23,9 @@ function register_form( $args ) {
 		$omg_forms = array();
 	}
 
-    $form_id = create_form( $args['name'] );
+    create_form( $args['name'] );
 
-	$omg_forms[ $args['name'] ] = array_merge( [ 'ID' => $form_id ], $args );
+	$omg_forms[ $args['name'] ] = $args;
 }
 
 function display_form( $slug ) {
@@ -38,9 +40,10 @@ function display_form( $slug ) {
     }
 
     $redirect = Helpers\get_redirect_attribute( $args );
+    $form_type = Helpers\get_form_type_attribute( $args );
 
 	ob_start(); ?>
-    <div class="omg-form-wrapper" <?php echo esc_attr( $redirect ); ?>>
+    <div class="omg-form-wrapper" <?php echo esc_attr( $redirect ); ?> <?php echo esc_attr( $form_type ); ?>>
 
         <?php do_action( 'omg_form_before_form' ); ?>
 
@@ -66,17 +69,18 @@ function display_form( $slug ) {
 }
 
 function get_form( $slug ) {
-    global $omg_forms;
-	$form = get_term_by( 'slug', $slug, IA\get_tax_forms() );
+	global $omg_forms;
 
-	if ( empty( $form ) ) {
-	    return false;
-    }
+	if ( empty( $omg_forms ) || ! isset( $omg_forms[ $slug ] ) ) {
+		return false;
+	}
 
-    if ( ! empty( $omg_forms ) && isset( $omg_forms[ $slug ] ) ) {
-	    return $omg_forms[ $slug ];
-    }
+	$form = apply_filters( 'omg_forms_get_form', $omg_forms[ $slug ], $slug );
 
+	if ( ! empty( $omg_forms ) && isset( $omg_forms[ $slug ] ) ) {
+		return $form;
+	}
+    //Todo This needs be changed. This function needs to return the whole form object.
 	return [ 'ID' => $form->term_id ];
 }
 
@@ -90,17 +94,11 @@ function create_form( $slug ) {
 	$form = get_form( $name );
 
 	if ( ! empty( $form ) ) {
-        return $form['ID'];
+        return true;
     }
 
-	$name = apply_filters( 'omg_forms_pre_form_create', $name, $slug );
+	do_action( 'omg_forms_create_form', $name, $slug );
 
-	/**
-	 * Create a new form as a term.
-	 */
-	$form = wp_insert_term( $name, IA\get_tax_forms(), [ 'slug' => $slug ] );
-
-    return $form['term_id'];
 }
 
 

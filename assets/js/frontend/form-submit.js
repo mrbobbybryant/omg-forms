@@ -18,28 +18,22 @@ export default function( Events ) {
       const data = new FormData( form );
       data.append( 'formId', form.getAttribute( 'id' ) );
 
-      submitForm( data )
-        .then( (response) => {
-          if ( 'omg_form_validation_fail' === response.code ) {
-            formErrors( response.data.fields );
-            Events.emit( 'omg-form-field-errors', {
-              fields: response.data.fields,
-              formWrapper: formWrapper,
-              form: form
-            } );
-          }
-
-          if ( true === response ) {
-            formSuccess( formWrapper, form );
-            Events.emit( 'omg-form-success', {
-              formWrapper: formWrapper,
-              form: form
-            } );
-          }
-        })
-        .catch( ( error) => {
-          console.warn( error );
-        });
+      if ( parseInt( formWrapper.dataset.rest ) ) {
+        submitForm( data )
+          .then( ( response ) => {
+            handleFormErrors( response, formWrapper, form, Events );
+            handleFormSuccess( response, formWrapper, form, Events );
+          } )
+          .catch( ( error) => {
+            console.warn( error );
+          });
+      } else {
+        Events.emit( 'omg-form-submit', {
+          data: data,
+          formWrapper: formWrapper,
+          form: form
+        } );
+      }
     } );
   } );
 }
@@ -82,8 +76,31 @@ const getFieldType = ( field ) => {
 
 }
 
+const handleFormErrors = ( response, formWrapper, form, Events ) => {
+  if ( 'omg_form_validation_fail' === response.code ) {
+    formErrors( response.data.fields );
+    Events.emit( 'omg-form-field-errors', {
+      fields: response.data.fields,
+      formWrapper: formWrapper,
+      form: form
+    } );
+  } else {
+    return response;
+  }
+}
+
+const handleFormSuccess = ( response, formWrapper, form, Events ) => {
+  if ( true === response ) {
+    formSuccess( formWrapper, form );
+    Events.emit( 'omg-form-success', {
+      formWrapper: formWrapper,
+      form: form
+    } );
+  }
+}
+
 const submitForm = ( data ) => {
-  const endpoint = `${OMGForms.baseURL}/wp-json/wp/v2/entries`;
+  const endpoint = `${OMGForms.baseURL}/wp-json/omg/v1/forms`;
   return new Promise( ( resolve, reject ) => {
 
 		var xhr = new XMLHttpRequest();
