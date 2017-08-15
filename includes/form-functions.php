@@ -41,7 +41,7 @@ function display_form( $slug ) {
 
     $redirect = Helpers\get_redirect_attribute( $args );
     $form_type = Helpers\get_form_type_attribute( $args );
-    $form_classname = ( ! isset( $args[ 'classname' ] ) ) ? sprintf( 'omg-form %s', $args[ 'classname' ] ) : 'omg-form';
+    $form_classname = ( isset( $args[ 'classname' ] ) ) ? sprintf( 'omg-form %s', $args[ 'classname' ] ) : 'omg-form';
 
 	ob_start(); ?>
     <div class="omg-form-wrapper" <?php echo esc_attr( $redirect ); ?> <?php echo esc_attr( $form_type ); ?>>

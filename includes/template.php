@@ -1,8 +1,8 @@
 <?php
 namespace OMGForms\Template;
 
-function locate_template( $name ) {
-	$template_paths = get_template_paths( $name );
+function locate_template( $name, $args ) {
+	$template_paths = get_template_paths( $name, $args );
 
 	foreach( $template_paths as $path ) {
 		if ( file_exists( $path ) ) {
@@ -13,7 +13,9 @@ function locate_template( $name ) {
 	return false;
 }
 
-function get_template_paths( $name ) {
+function get_template_paths( $name, $args ) {
+	$name = ( isset( $args[ 'template' ] ) ) ? $args[ 'template' ] : $name;
+
 	return [
 		sprintf( '%s/forms/%s' , get_stylesheet_directory(), $name ),
 		sprintf( '%s/forms/%s', get_template_directory(), $name ),
@@ -22,7 +24,7 @@ function get_template_paths( $name ) {
 }
 
 function get_template_part( $name, $args ) {
-	$template_path = locate_template( $name );
+	$template_path = locate_template( $name, $args );
 
 	if ( empty( $template_path ) ) {
 		return false;
