@@ -134,7 +134,7 @@ function normalize_field_name( $field ) {
 	return str_replace( 'omg-forms-', '', $field );
 }
 
-function sanitize_phone( $value ) {
+function is_phone( $value ) {
 	return preg_match( '%^[+]?[0-9()/ -]*$%', $value );
 }
 

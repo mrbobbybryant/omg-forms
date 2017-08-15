@@ -68,25 +68,10 @@ function display_form( $slug ) {
 	<?php return ob_get_clean();
 }
 
-//function get_form( $slug ) {
-//    global $omg_forms;
-//	$form = get_term_by( 'slug', $slug, IA\get_tax_forms() );
-//
-//	if ( empty( $form ) ) {
-//	    return false;
-//    }
-//
-//    if ( ! empty( $omg_forms ) && isset( $omg_forms[ $slug ] ) ) {
-//	    return $omg_forms[ $slug ];
-//    }
-//
-//	return [ 'ID' => $form->term_id ];
-//}
-
 function get_form( $slug ) {
 	global $omg_forms;
 
-	if ( empty( $omg_forms ) ) {
+	if ( empty( $omg_forms ) || ! isset( $omg_forms[ $slug ] ) ) {
 		return false;
 	}
 

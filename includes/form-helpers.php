@@ -26,6 +26,10 @@ function validate_form_options( $args ) {
 		throw new \Exception( 'You must provide at least one field for this to be a valid form.' );
 	}
 
+	if( ! isset( $args[ 'form_type' ] ) ) {
+		throw new \Exception( 'You must provide a form type for this to be a valid form.' );
+	}
+
 	if ( isset( $args['email'] ) && true === $args['email'] && ! isset( $args['email_to'] ) ) {
 		throw new \Exception( 'You must pass an email_to argument in order for email to work.' );
 	}
