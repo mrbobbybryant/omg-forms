@@ -32,6 +32,10 @@ function format_field( $field ) {
 		$field[ 'placeholder' ] = '';
 	}
 
+	if ( ! isset( $field[ 'classname' ] ) ) {
+		$field[ 'classname' ] = '';
+	}
+
 	return $field;
 }
 
