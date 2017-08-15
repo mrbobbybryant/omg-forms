@@ -22,6 +22,8 @@ require_once OMG_FORMS_DIR . '/includes/form-functions.php';
 require_once OMG_FORMS_DIR . '/includes/field-functions.php';
 require_once OMG_FORMS_DIR . '/includes/template.php';
 require_once OMG_FORMS_DIR . '/includes/form-helpers.php';
+require_once OMG_FORMS_DIR . '/includes/settings.php';
 
 \OMGForms\Core\setup();
 \OMGForms\API\setup();
+\OMGForms\Settings\setup();
