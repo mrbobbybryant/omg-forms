@@ -58,11 +58,11 @@ function display_form( $slug ) {
 			    echo get_field_template( Template\get_template_name( $field[ 'type' ] ), $field );
 		    endforeach;
 
-		    do_action( 'omg_form_before_form_submit' );
+		    do_action( 'omg_form_before_form_submit', $slug, $args );
 
 		    echo get_field_template( Template\get_template_name( 'submit' ), [] ); ?>
         </form>
-        <?php do_action( 'omg_form_after_form' ); ?>
+        <?php do_action( 'omg_form_after_form', $slug, $args ); ?>
     </div>
 
 
