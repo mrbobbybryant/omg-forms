@@ -59,9 +59,9 @@ function submit_form_data( $request ) {
 		return $data;
 	}
 
-	do_action( 'omg_forms_save_data', $data, $form );
+	$result = apply_filters( 'omg_forms_save_data', true, $data, $form );
 
-	return true;
+	return $result;
 }
 
 function check_required_forms( $fields, $form ) {

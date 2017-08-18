@@ -23,9 +23,11 @@ function register_form( $args ) {
 		$omg_forms = array();
 	}
 
-    create_form( $args['name'] );
+	$form_name = strtolower( $args['name'] );
 
-	$omg_forms[ $args['name'] ] = $args;
+    create_form( $form_name );
+
+	$omg_forms[ $form_name ] = $args;
 }
 
 function display_form( $slug ) {
@@ -86,6 +88,7 @@ function get_form( $slug ) {
 }
 
 function create_form( $slug ) {
+    $slug = strtolower( $slug );
 	$name = Helpers\get_form_name( $slug );
 
 	/**
