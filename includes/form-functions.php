@@ -74,6 +74,8 @@ function display_form( $slug ) {
 function get_form( $slug ) {
 	global $omg_forms;
 
+	$slug = strtolower( $slug );
+
 	if ( empty( $omg_forms ) || ! isset( $omg_forms[ $slug ] ) ) {
 		return false;
 	}
