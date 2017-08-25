@@ -44,11 +44,13 @@ function format_field( $field ) {
 function get_field( $form, $field_name ) {
 	global $omg_forms;
 
-	if ( ! isset( $omg_forms[ $form ] ) || empty( $omg_forms[ $form ]['fields'] ) ) {
+	$slug = strtolower( $form );
+
+	if ( ! isset( $omg_forms[ strtolower( $slug ) ] ) || empty( $omg_forms[ $slug ]['fields'] ) ) {
 		return false;
 	}
 
-	$field = array_values( array_filter( $omg_forms[ $form ]['fields'], function( $field ) use ( $field_name ) {
+	$field = array_values( array_filter( $omg_forms[ $slug ]['fields'], function( $field ) use ( $field_name ) {
 		return $field_name === $field['slug'];
 	} ) );
 

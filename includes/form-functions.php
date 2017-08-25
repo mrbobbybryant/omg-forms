@@ -25,7 +25,7 @@ function register_form( $args ) {
 
 	$form_name = strtolower( $args['name'] );
 
-    create_form( $form_name );
+    create_form( $form_name, $args );
 
 	$omg_forms[ $form_name ] = $args;
 }
@@ -89,7 +89,7 @@ function get_form( $slug ) {
 	return [ 'ID' => $form->term_id ];
 }
 
-function create_form( $slug ) {
+function create_form( $slug, $args ) {
     $slug = strtolower( $slug );
 	$name = Helpers\get_form_name( $slug );
 
@@ -103,7 +103,7 @@ function create_form( $slug ) {
         return true;
     }
 
-	do_action( 'omg_forms_create_form', $name, $slug );
+	do_action( 'omg_forms_create_form', $slug, $args );
 
 }
 
