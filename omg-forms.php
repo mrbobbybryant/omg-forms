@@ -13,7 +13,7 @@ if ( !defined( 'OMG_FORMS_FILE' ) ) {
 }
 
 if ( !defined( 'OMG_FORMS_VERSION' ) ) {
-	define( 'OMG_FORMS_VERSION', '0.3.0' );
+	define( 'OMG_FORMS_VERSION', '0.4.0' );
 }
 
 require_once OMG_FORMS_DIR . '/includes/core.php';
@@ -23,7 +23,9 @@ require_once OMG_FORMS_DIR . '/includes/field-functions.php';
 require_once OMG_FORMS_DIR . '/includes/template.php';
 require_once OMG_FORMS_DIR . '/includes/form-helpers.php';
 require_once OMG_FORMS_DIR . '/includes/settings.php';
+require_once OMG_FORMS_DIR . '/includes/shortcodes.php';
 
 \OMGForms\Core\setup();
 \OMGForms\API\setup();
 \OMGForms\Settings\setup();
+\OMGForms\Shortcodes\setup();
