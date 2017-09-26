@@ -1,8 +1,8 @@
 {
-  "name": "omg-forms",
+  "name": "Developwithwp/omg-forms",
   "description": "A WordPress Forms library built for developers.",
-  "version": "0.1.0",
-  "type": "library",
+  "version": "0.4.0",
+  "type": "package",
   "keywords": [],
   "homepage": "https://github.com/mrbobbybryant/omg-forms",
   "license": "GPL-2.0+",
