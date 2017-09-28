@@ -7,7 +7,7 @@ function setup() {
 }
 
 function scripts() {
-	wp_enqueue_script( 'omg-js', OMG_FORMS_URL . '/omg-forms/dist/frontend.bundle.js', array(), OMG_FORMS_VERSION, true );
+	wp_enqueue_script( 'omg-js', OMG_FORMS_URL . '/developwithwp/omg-forms/dist/frontend.bundle.js', array(), OMG_FORMS_VERSION, true );
 
 	wp_localize_script(
 		'omg-js',
@@ -20,5 +20,5 @@ function scripts() {
 }
 
 function styles() {
-	wp_enqueue_style( 'omg-css', OMG_FORMS_URL . '/omg-forms/dist/frontend.bundle.css', array(), OMG_FORMS_VERSION );
+	wp_enqueue_style( 'omg-css', OMG_FORMS_URL . '/developwithwp/omg-forms/dist/frontend.bundle.css', array(), OMG_FORMS_VERSION );
 }

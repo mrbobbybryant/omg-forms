@@ -1,8 +1,8 @@
 {
-  "name": "develop-with-wp",
-  "title": "develop With WP",
-  "description": "The Best place to learn WordPress Development",
-  "version": "0.1.0",
+  "name": "developwithwp/omg-forms",
+  "title": "OMG Forms",
+  "description": "A WordPress Forms library built for developers.",
+  "version": "0.5.1",
   "homepage": "https://github.com/mrbobbybryant/omg-forms",
   "scripts": {
     "start": "webpack --config webpack.config.js",
@@ -15,7 +15,7 @@
   },
   "author": {
     "name": "Bobby Bryant",
-    "email": "bbryant@wpcreative.agency",
+    "email": "bbryant@developwithwp.com",
     "url": "http://developwithwp.com"
   },
   "devDependencies": {

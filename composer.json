@@ -1,7 +1,7 @@
 {
   "name": "developwithwp/omg-forms",
   "description": "A WordPress Forms library built for developers.",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "type": "package",
   "keywords": [],
   "homepage": "https://github.com/mrbobbybryant/omg-forms",
