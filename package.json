@@ -2,7 +2,6 @@
   "name": "developwithwp/omg-forms",
   "title": "OMG Forms",
   "description": "A WordPress Forms library built for developers.",
-  "version": "0.5.1",
   "homepage": "https://github.com/mrbobbybryant/omg-forms",
   "scripts": {
     "start": "webpack --config webpack.config.js",
