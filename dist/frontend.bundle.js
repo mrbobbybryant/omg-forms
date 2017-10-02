@@ -213,7 +213,13 @@ var submitForm = function submitForm(data) {
     var xhr = new XMLHttpRequest();
 
     xhr.addEventListener("load", function (evt) {
-      return resolve(JSON.parse(xhr.response));
+      if (xhr.readyState === 4 && xhr.status === 200) {
+        return resolve(JSON.parse(xhr.response));
+      }
+
+      if (xhr.readyState === 4 && xhr.status <= 400) {
+        return reject(JSON.parse(xhr.response));
+      }
     }, false);
 
     xhr.addEventListener("error", function (error) {
@@ -278,7 +284,7 @@ exports.default = function (wrapper, form) {
   if (successMessage) {
     form.classList.add('show');
     successMessage.classList.add('show');
-    return;
+    return true;
   }
 
   var redirect = wrapper.dataset.redirect;

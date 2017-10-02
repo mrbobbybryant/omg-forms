@@ -1,5 +1,5 @@
 {
-  "name": "developwithwp/omg-forms",
+  "name": "omg-forms",
   "title": "OMG Forms",
   "description": "A WordPress Forms library built for developers.",
   "homepage": "https://github.com/mrbobbybryant/omg-forms",
@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/mrbobbybryant/omg-forms"
   },
   "author": {
     "name": "Bobby Bryant",

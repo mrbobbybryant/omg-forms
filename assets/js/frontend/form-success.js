@@ -4,7 +4,7 @@ export default function( wrapper, form ) {
   if ( successMessage ) {
     form.classList.add( 'show' );
     successMessage.classList.add( 'show' );
-    return;
+    return true;
   }
 
   const redirect = wrapper.dataset.redirect;

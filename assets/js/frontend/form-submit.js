@@ -106,7 +106,13 @@ const submitForm = ( data ) => {
 		var xhr = new XMLHttpRequest();
 
 		xhr.addEventListener("load", ( evt ) => {
-			return resolve( JSON.parse( xhr.response ) );
+            if ( xhr.readyState === 4 && xhr.status === 200 ) {
+                return resolve( JSON.parse( xhr.response ) );
+            }
+
+            if ( xhr.readyState === 4 && xhr.status <= 400 ) {
+                return reject( JSON.parse( xhr.response ) );
+            }
 		}, false);
 
 		xhr.addEventListener("error", ( error ) => {

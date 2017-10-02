@@ -60,10 +60,11 @@ function get_field( $form, $field_name ) {
 
 function get_fields( $form ) {
 	global $omg_forms;
+	$form_name = strtolower( $form );
 
-	if ( empty( $omg_forms ) || ! isset( $omg_forms[ $form ] ) ) {
+	if ( empty( $omg_forms ) || ! isset( $omg_forms[ $form_name ] ) ) {
 		return false;
 	}
 
-	return $omg_forms[ $form ]['fields'];
+	return $omg_forms[ $form_name ]['fields'];
 }
