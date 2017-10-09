@@ -84,7 +84,7 @@ As you can see the form allows for a lot of configuration at both the form and t
 
 Once you have defined a form, you can render it by calling `display_form`.
 ```php
-echo \OMGForms\Core\display_form( 'PledgeForm' );
+echo \OMGForms\Core\display_form( 'my-form-name' );
 ```
 
 Or via a built-in shortcode.
@@ -94,6 +94,9 @@ Or via a built-in shortcode.
 ## API
 
 ### Form Settings
+
+> The follow api settings will dictate how your new form will function at a global level.
+
 **name:** - Should be a *unique name* for this form. i.e. `contact-form` or `contactForm`.
 
 **redirect** - Allows you the ability to redirect the form after a successful submission. In order for this to work, you must always provide a `redirect_url` argument as well.
@@ -113,10 +116,13 @@ Or via a built-in shortcode.
 **fields** - An array of all the field types, and their properties.
 
 ### Field Settings
-Each form field has a number of settings which you can use to dictate how that form will look and act.
+
+> Each form field has a number of settings which you can use to dictate how that form will look and act.
 
 **slug** - A computer readable unique name for the field.
+
 **label** - A Human readable name for this field. By default each field needs a label. This is an important accessibility best practice.
+
 **type** - Lets you specify what type of HTML5 field this should be.
 Supports
  - text
@@ -131,9 +137,23 @@ Supports
  - textarea
 
 **required** - Can be `true` or `false`. Allows you the ability to make a field required.
+
 **placeholder** - Lets you set a placeholder value.
+
 **error** - Lets you define an error message for this field if it fails server side validation.
+
 **template** - While OMG Forms has a built way to override a fields html markup across the board. This settings lets you set a template on a per form or per field basis. *Note: template name cannot match any of the default field template names)*
+
+**Example**
+```php
+[
+    'slug'      => 'first-name',
+    'label'     =>  'First Name',
+    'type'      =>  'text',
+    'required'  =>  true,
+    'template'  =>  'text-larger.php'
+]
+```
 
 ### Customizing the Form
 OMG Forms has a built in mechanism which makes override the field html a breeze.
