@@ -95,13 +95,21 @@ Or via a built-in shortcode.
 
 ### Form Settings
 **name:** - Should be a *unique name* for this form. i.e. `contact-form` or `contactForm`.
+
 **redirect** - Allows you the ability to redirect the form after a successful submission. In order for this to work, you must always provide a `redirect_url` argument as well.
+
 **redirect_url** - A valid URL to redirect the user to after a successful form submission.
+
 **email** - Allows you the ability to notify someone via email whenever a form is submitted.
+
 **email_to** - A valid email address of the person to notify after a successful form submission. *(NOTE: Currentl yonly supports notifying one person)*
+
 **success_message** - Allows you the ability to customize the success message a user is shown. *This is only used when `redirect` to set to false.*
+
 **form_type** - OMG Forms is built using an addon model. This setting lets you specify which addon or type of form you want this form to be. i.e `basic-form` or `mailchimp` etc...
+
 **classname** - Allows you do add a custom class to the form wrapper.
+
 **fields** - An array of all the field types, and their properties.
 
 ### Field Settings
