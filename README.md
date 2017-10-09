@@ -147,18 +147,24 @@ Supports
 **Example**
 ```php
 [
-    'slug'      => 'first-name',
-    'label'     =>  'First Name',
-    'type'      =>  'text',
-    'required'  =>  true,
-    'template'  =>  'text-larger.php'
+    'slug'          => 'first-name',
+    'label'         =>  'First Name',
+    'type'          =>  'text',
+    'required'      =>  true,
+    'template'      =>  'text-larger.php',
+    'placeholder'   =>  'My placeholder text',
+    'error'         =>  'My Error Message'
 ]
 ```
 
 ### Customizing the Form
-OMG Forms has a built in mechanism which makes override the field html a breeze.
+
+> OMG Forms has a built in mechanism which makes override the field html a breeze.
+
 **Step 1** Create a directory in the root of your theme called `forms`.
+
 **Step 2** Create a file for the field you wish to overrider. *(NOTE: Make sure you do the same name.)* So if you want to override how the text fields are looking them you need to create a field called `text.php`.
+
 **Step 3** Write your own markup and **profit**. To get started I would encourage you to copy the existing markup and use that as a starting point.
 
 ## Roadmap
