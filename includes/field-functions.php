@@ -13,10 +13,6 @@ function validate_form_fields( $fields ) {
 		if ( ! isset( $field[ 'slug' ] ) || ! isset( $field[ 'type' ] ) ) {
 			trigger_error( 'Invalid field. A field must include a slug and type property.', E_USER_ERROR );
 		}
-
-		if ( ! isset( $field[ 'label' ] ) ) {
-			trigger_error( 'While it will work. All fields should have a label.', E_USER_NOTICE );
-		}
 	}
 }
 
