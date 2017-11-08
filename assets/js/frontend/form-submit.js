@@ -31,7 +31,8 @@ export default function( Events ) {
         Events.emit( 'omg-form-submit', {
           data: data,
           formWrapper: formWrapper,
-          form: form
+          form: form,
+          formType: formWrapper.dataset.formtype
         } );
       }
     } );

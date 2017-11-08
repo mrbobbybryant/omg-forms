@@ -33,20 +33,22 @@ function register_form( $args ) {
 function display_form( $slug ) {
     $args = get_form( $slug );
 
-    if ( empty( $args ) ) {
-        throw new \Exception( 'A form with that name does not exist.' );
-    }
+	if ( empty( $args ) ) {
+		trigger_error( 'A form with that name does not exist.', E_USER_ERROR );
+	}
 
-    if ( ! isset( $args[ 'fields' ] ) ) {
-	    throw new \Exception( 'You must register at least of field for a form to be valid.' );
-    }
+	if ( ! isset( $args[ 'fields' ] ) ) {
+		trigger_error( 'You must register at least of field for a form to be valid.', E_USER_ERROR );
+	}
 
     $redirect = Helpers\get_redirect_attribute( $args );
+    $rest_type = Helpers\get_form_rest_attribute( $args );
     $form_type = Helpers\get_form_type_attribute( $args );
     $form_classname = ( isset( $args[ 'classname' ] ) ) ? sprintf( 'omg-form %s', $args[ 'classname' ] ) : 'omg-form';
+	$fields = order_fields_by_group( $args['fields'], $args );
 
 	ob_start(); ?>
-    <div class="omg-form-wrapper" <?php echo esc_attr( $redirect ); ?> <?php echo esc_attr( $form_type ); ?>>
+    <div class="omg-form-wrapper" <?php echo esc_attr( $redirect ); ?> <?php echo esc_attr( $rest_type ); ?> <?php echo esc_attr( $form_type ); ?>>
 
         <?php do_action( 'omg_form_before_form' ); ?>
 
@@ -56,9 +58,13 @@ function display_form( $slug ) {
          </p>
         <?php endif; ?>
         <form class="<?php echo esc_attr( $form_classname ); ?>" action="" id="<?php echo esc_attr( $args['name'] ) ?>">
-		    <?php foreach( $args['fields'] as $field ) :
-			    echo get_field_template( Template\get_template_name( $field[ 'type' ] ), $field );
-		    endforeach;
+	        <?php if ( isset( $args[ 'groups' ] ) && ! empty( $args[ 'groups' ] ) ) {
+                echo build_form_groups( $fields );
+	        } else {
+		        foreach( $fields as $field ) :
+			        echo get_field_template( Template\get_template_name( $field[ 'type' ] ), $field );
+		        endforeach;
+	        }
 
 		    do_action( 'omg_form_before_form_submit', $slug, $args );
 
@@ -85,7 +91,7 @@ function get_form( $slug ) {
 	if ( ! empty( $omg_forms ) && isset( $omg_forms[ $slug ] ) ) {
 		return $form;
 	}
-    //Todo This needs be changed. This function needs to return the whole form object.
+    //TODO This needs be changed. This function needs to return the whole form object.
 	return [ 'ID' => $form->term_id ];
 }
 
@@ -107,4 +113,55 @@ function create_form( $slug, $args ) {
 
 }
 
+function order_fields_by_group( $fields, $form ) {
+	if ( ! isset( $form[ 'groups' ] ) || empty( $form[ 'groups' ] ) ) {
+		return $fields;
+	}
 
+	$groups = array_reduce( $fields, function( $prev, $cur ) use ( $form ) {
+		if ( ! isset( $cur[ 'group' ] ) ) {
+			return $prev;
+		}
+
+		$group = Helpers\get_form_group( $form['groups'], $cur[ 'group' ] );
+
+		if ( ! empty( $group ) ) {
+			$prev[ $cur[ 'group' ] ]['fields'][] = $cur;
+			$prev[ $cur[ 'group' ] ] = wp_parse_args( $group, $prev[ $cur[ 'group' ] ] );
+		}
+
+		return $prev;
+	}, [] );
+
+	if ( ! empty( $groups ) ) {
+		uasort( $groups, __NAMESPACE__ . '\order_groups' );
+	}
+
+	return $groups;
+
+}
+
+function order_groups( $group_a, $group_b ) {
+	if ( $group_a[ 'order' ] === $group_b[ 'order' ] ) {
+		return 0;
+	}
+
+	return $group_a[ 'order' ] < $group_b[ 'order' ] ? -1 : 1;
+}
+
+function build_form_groups( $fields ) {
+    ob_start();
+
+    foreach( $fields as $group ) : ?>
+        <fieldset class="<?php echo ( isset( $group[ 'class' ] ) )  ? esc_attr( $group[ 'class' ] ) : ''; ?>">
+            <?php if ( isset( $group[ 'title' ] ) ) : ?>
+                <legend><?php echo esc_html( $group['title'] ); ?></legend>
+            <?php endif;
+            foreach( $group[ 'fields' ] as $field ) :
+                echo get_field_template( Template\get_template_name( $field[ 'type' ] ), $field );
+            endforeach; ?>
+        </fieldset>
+	<?php endforeach;
+
+	return ob_get_clean();
+}
