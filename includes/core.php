@@ -7,8 +7,9 @@ function setup() {
 }
 
 function scripts() {
-	wp_enqueue_script( 'omg-js', OMG_FORMS_URL . '/developwithwp/omg-forms/dist/frontend.bundle.js', array(), OMG_FORMS_VERSION, true );
+	wp_enqueue_script( 'omg-js', OMG_FORMS_URL . '/developwithwp/omg-forms/dist/frontend.bundle.js', array( 'closest-js', 'promise-js' ), OMG_FORMS_VERSION, true );
 	wp_enqueue_script( 'closest-js', OMG_FORMS_URL . '/developwithwp/omg-forms/assets/js/vendor/closest.js', array(), OMG_FORMS_VERSION, true );
+	wp_enqueue_script( 'promise-js', OMG_FORMS_URL . '/developwithwp/omg-forms/assets/js/vendor/promise.min.js', array(), OMG_FORMS_VERSION, true );
 
 	wp_localize_script(
 		'omg-js',
