@@ -68,3 +68,17 @@ function get_fields( $form ) {
 
 	return $omg_forms[ $form_name ]['fields'];
 }
+
+function register_supplementary_field( $form_type, $field_args, $form_args ) {
+	if ( $form_args[ 'form_type' ] === $form_type ) {
+
+		if ( ! isset( $field_args[ 'group' ] ) && isset( $form_args[ 'groups' ] ) ) {
+			$last_group = count( $form_args[ 'groups' ] ) - 1;
+			$field_args[ 'group' ] = $form_args[ 'groups' ][ $last_group ][ 'id' ];
+		}
+
+		$form_args['fields'][] = $field_args;
+	}
+
+	return $form_args;
+}
