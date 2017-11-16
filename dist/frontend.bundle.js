@@ -261,29 +261,47 @@ var submitForm = function submitForm(data) {
 
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+    value: true
 });
 
 exports.default = function (errors) {
-  var fields = errors.map(function (error) {
-    return document.getElementById(error);
-  });
-
-  if (!fields || 0 === fields.length) {
-    return false;
-  }
-
-  fields.forEach(function (field) {
-    var input = field.querySelector('input');
-
-    field.classList.add('error');
-
-    input.addEventListener('keyup', function (e) {
-      if (e.target.value) {
-        field.classList.remove('error');
-      }
+    var fields = errors.map(function (error) {
+        return document.getElementById(error);
     });
-  });
+
+    if (!fields || 0 === fields.length) {
+        return false;
+    }
+
+    fields.forEach(function (field) {
+        var input = field.querySelector('input');
+        var select = field.querySelector('select');
+        var textarea = field.querySelector('textarea');
+
+        field.classList.add('error');
+
+        if (input) {
+            input.addEventListener('keyup', function (e) {
+                if (e.target.value) {
+                    field.classList.remove('error');
+                }
+            });
+        }
+
+        if (select) {
+            select.addEventListener('select', function (e) {
+                field.classList.remove('error');
+            });
+        }
+
+        if (textarea) {
+            textarea.addEventListener('keyup', function (e) {
+                if (e.target.value) {
+                    field.classList.remove('error');
+                }
+            });
+        }
+    });
 };
 
 /***/ }),
