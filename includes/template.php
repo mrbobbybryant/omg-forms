@@ -30,6 +30,8 @@ function get_template_part( $name, $args ) {
 		return false;
 	}
 
+	$args[ 'error' ] = format_template_error_message( $args );
+
 	if ( is_array( $args ) ){
 		extract( $args );
 	}
@@ -41,4 +43,8 @@ function get_template_part( $name, $args ) {
 
 function get_template_name( $field_type ) {
 	return sprintf( '%s.php', $field_type );
+}
+
+function format_template_error_message( $args ) {
+	return isset( $args['error'] ) ? $args['error'] : '';
 }
