@@ -116,20 +116,27 @@ exports.default = function (Events) {
       e.preventDefault();
 
       var data = new FormData(form);
+      var formError = document.getElementById('omg-form-level-error');
+
+      if (formError.classList.contains('error')) {
+        formError.classList.remove('error');
+      }
+
       data.append('formId', form.getAttribute('id'));
 
       if (parseInt(formWrapper.dataset.rest)) {
         submitForm(data).then(function (response) {
-          handleFormErrors(response, formWrapper, form, Events);
           handleFormSuccess(response, formWrapper, form, Events);
         }).catch(function (error) {
-          console.warn(error);
+          handleFormErrors(error, formWrapper, form, Events);
+          // console.warn( error );
         });
       } else {
         Events.emit('omg-form-submit', {
           data: data,
           formWrapper: formWrapper,
-          form: form
+          form: form,
+          formType: formWrapper.dataset.formtype
         });
       }
     });
@@ -183,16 +190,25 @@ var getFieldType = function getFieldType(field) {
   }
 };
 
-var handleFormErrors = function handleFormErrors(response, formWrapper, form, Events) {
-  if ('omg_form_validation_fail' === response.code) {
-    (0, _formErrors2.default)(response.data.fields);
+var handleFormErrors = function handleFormErrors(error, formWrapper, form, Events) {
+  if ('omg-form-field-error' === error.code) {
+    (0, _formErrors2.default)(error.data.fields);
     Events.emit('omg-form-field-errors', {
-      fields: response.data.fields,
+      fields: error.data.fields,
       formWrapper: formWrapper,
       form: form
     });
-  } else {
-    return response;
+  }
+
+  if ('omg-form-submission-error' === error.code) {
+    var formError = document.getElementById('omg-form-level-error');
+    formError.innerHTML = error.message;
+    formError.classList.add('error');
+    Events.emit('omg-form-submission-error', {
+      error: error,
+      formWrapper: formWrapper,
+      form: form
+    });
   }
 };
 
@@ -253,15 +269,18 @@ exports.default = function (errors) {
     return document.getElementById(error);
   });
 
-  if (0 === fields.length) {
+  if (!fields || 0 === fields.length) {
     return false;
   }
 
   fields.forEach(function (field) {
-    field.classList.add('show');
-    field.addEventListener('keyup', function (e) {
+    var input = field.querySelector('input');
+
+    field.classList.add('error');
+
+    input.addEventListener('keyup', function (e) {
       if (e.target.value) {
-        field.classList.remove('show');
+        field.classList.remove('error');
       }
     });
   });

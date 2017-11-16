@@ -66,9 +66,11 @@ function display_form( $slug ) {
 		        endforeach;
 	        }
 
-		    do_action( 'omg_form_before_form_submit', $slug, $args );
+		    do_action( 'omg_form_before_form_submit', $slug, $args ); ?>
 
-		    echo get_field_template( Template\get_template_name( 'submit' ), [] ); ?>
+	        <p id="omg-form-level-error" class="omg-form-error"></p>
+
+		    <?php echo get_field_template( Template\get_template_name( 'submit' ), [] ); ?>
         </form>
         <?php do_action( 'omg_form_after_form', $slug, $args ); ?>
     </div>

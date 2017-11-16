@@ -1,26 +1,35 @@
-.omg-form .omg-error {
+.omg-form
 
-    display: none;
+  .omg-form label.show .omg-error {
+  display: inline-block;
 }
 
-.omg-form label.show .omg-error {
+.omg-error {
+  display: none;
+}
 
-    display: inline-block;
+.omg-form-error {
+  display: none;
+}
+
+.omg-form-error.error {
+  display: block;
+}
+
+.omg-forms-input.error .omg-error {
+  display: block;
 }
 
 .omg-form-wrapper .omg-success {
-
-    display: none;
+  display: none;
 }
 
 .omg-form-wrapper form.show {
-
-    display: none;
+  display: none;
 }
 
 .omg-form-wrapper .omg-success.show {
-
-    display: block;
+  display: block;
 }
 
 /*# sourceMappingURL=frontend.bundle.css.map*/

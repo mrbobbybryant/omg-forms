@@ -1,1 +1,1 @@
-<input type="hidden" name="<?php echo esc_attr( $name ) ?>" value="10" />
+<input type="hidden" name="<?php echo esc_attr( $name ) ?>" value="70.02" class="omg-forms-input"  />

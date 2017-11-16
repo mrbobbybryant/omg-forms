@@ -1,13 +1,29 @@
 .omg-form {
-  & .omg-error {
-    display: none;
-  }
+  &
 
   & label.show {
     & .omg-error {
       display: inline-block;
     }
   }
+}
+
+.omg-error {
+  display: none;
+}
+
+.omg-form-error {
+  display: none;
+}
+
+.omg-form-error.error {
+  display: block;
+}
+
+.omg-forms-input.error {
+    .omg-error {
+        display: block;
+    }
 }
 
 .omg-form-wrapper {
