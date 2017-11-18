@@ -86,3 +86,44 @@ function get_form_group( $groups, $group_id ) {
 
 	return ! empty( $result ) ? $result[0] : false;
 }
+
+function return_form_level_error( $message ) {
+	return new \WP_Error(
+		'omg-form-submission-error',
+		$message,
+		array( 'status' => 400 )
+	);
+}
+
+function return_field_level_error( $message, $fields ) {
+	if ( ! is_array( $fields ) ) {
+		return return_error(
+			'omg-form-developer-error',
+			'return_field_level_error expects the $fields argument to be an array.',
+			400
+		);
+	}
+
+	return new \WP_Error(
+		'omg-form-field-error',
+		$message,
+		array( 'status' => 400, 'fields' => $fields )
+	);
+}
+
+function return_error( $code, $message, $status, $data = false ) {
+	if ( $data ) {
+		return new \WP_Error(
+			$code,
+			$message,
+			array( 'status' => $status, $data )
+		);
+	}
+
+	return new \WP_Error(
+		$code,
+		$message,
+		array( 'status' => $status )
+	);
+
+}

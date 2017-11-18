@@ -16,7 +16,6 @@ function register_rest_endpoint() {
 	) );
 }
 
-
 function create_item_permissions_check( $request ) {
 	$allow_anonymous = apply_filters( 'rest_allow_anonymous_entries', true, $request );
 
