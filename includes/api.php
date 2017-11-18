@@ -122,7 +122,7 @@ function get_field_sanitize_type( $type ) {
 		case 'email':
 			return 'sanitize_email';
 		case 'textarea':
-			return 'wp_kses_post';
+			return 'wp_filter_kses_post';
 		case 'number':
 			return 'absint';
 		default:
