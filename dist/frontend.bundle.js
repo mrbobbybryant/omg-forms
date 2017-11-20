@@ -214,7 +214,7 @@ var handleFormErrors = function handleFormErrors(error, formWrapper, form, Event
 };
 
 var handleFormSuccess = function handleFormSuccess(response, formWrapper, form, Events) {
-  if (true === response) {
+  if (response) {
     (0, _formSuccess2.default)(formWrapper, form);
     Events.emit('omg-form-success', {
       formWrapper: formWrapper,

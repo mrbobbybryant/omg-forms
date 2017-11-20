@@ -107,7 +107,7 @@ const handleFormErrors = ( error, formWrapper, form, Events ) => {
 }
 
 const handleFormSuccess = ( response, formWrapper, form, Events ) => {
-  if ( true === response ) {
+  if ( response ) {
     formSuccess( formWrapper, form );
     Events.emit( 'omg-form-success', {
       formWrapper: formWrapper,
