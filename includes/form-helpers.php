@@ -14,7 +14,11 @@ function get_form_rest_attribute( $args ) {
 }
 
 function get_form_type_attribute( $args ) {
-	return sprintf( 'data-formtype=%s', $args[ 'form_type' ] );
+	if ( is_array( $args[ 'form_type' ] ) ) {
+		return sprintf( 'data-formtype=%s', json_encode( $args[ 'form_type' ] ) );
+	}
+
+	return sprintf( 'data-formtype=%s', json_encode( [ $args[ 'form_type' ] ] ) );
 }
 
 function validate_form_options( $args ) {
@@ -85,4 +89,52 @@ function get_form_group( $groups, $group_id ) {
 	} ) );
 
 	return ! empty( $result ) ? $result[0] : false;
+}
+
+function is_form_type( $type, $form ) {
+	if ( is_array( $form['form_type'] ) ) {
+		return in_array( $type, $form['form_type'] );
+	}
+
+	return $type === $form['form_type'];
+}
+
+function return_form_level_error( $message ) {
+	return new \WP_Error(
+		'omg-form-submission-error',
+		$message,
+		array( 'status' => 400 )
+	);
+}
+
+function return_field_level_error( $message, $fields ) {
+	if ( ! is_array( $fields ) ) {
+		return return_error(
+			'omg-form-developer-error',
+			'return_field_level_error expects the $fields argument to be an array.',
+			400
+		);
+	}
+
+	return new \WP_Error(
+		'omg-form-field-error',
+		$message,
+		array( 'status' => 400, 'fields' => $fields )
+	);
+}
+
+function return_error( $code, $message, $status, $data = false ) {
+	if ( $data ) {
+		return new \WP_Error(
+			$code,
+			$message,
+			array( 'status' => $status, $data )
+		);
+	}
+
+	return new \WP_Error(
+		$code,
+		$message,
+		array( 'status' => $status )
+	);
 }

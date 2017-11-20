@@ -16,23 +16,30 @@ export default function( Events ) {
       e.preventDefault();
 
       const data = new FormData( form );
+      const formError = document.getElementById( 'omg-form-level-error' );
+
+      if ( formError.classList.contains( 'error' ) ) {
+        formError.classList.remove( 'error' );
+      }
+
       data.append( 'formId', form.getAttribute( 'id' ) );
 
       if ( parseInt( formWrapper.dataset.rest ) ) {
+          console.log(JSON.parse( formWrapper.dataset.formtype ));
         submitForm( data )
           .then( ( response ) => {
-            handleFormErrors( response, formWrapper, form, Events );
             handleFormSuccess( response, formWrapper, form, Events );
           } )
           .catch( ( error) => {
-            console.warn( error );
+            handleFormErrors( error, formWrapper, form, Events );
+            // console.warn( error );
           });
       } else {
         Events.emit( 'omg-form-submit', {
           data: data,
           formWrapper: formWrapper,
           form: form,
-          formType: formWrapper.dataset.formtype
+          formType: JSON.parse( formWrapper.dataset.formtype )
         } );
       }
     } );
@@ -77,16 +84,25 @@ const getFieldType = ( field ) => {
 
 }
 
-const handleFormErrors = ( response, formWrapper, form, Events ) => {
-  if ( 'omg_form_validation_fail' === response.code ) {
-    formErrors( response.data.fields );
+const handleFormErrors = ( error, formWrapper, form, Events ) => {
+  if ( 'omg-form-field-error' === error.code ) {
+    formErrors( error.data.fields );
     Events.emit( 'omg-form-field-errors', {
-      fields: response.data.fields,
+      fields: error.data.fields,
       formWrapper: formWrapper,
       form: form
     } );
-  } else {
-    return response;
+  }
+
+  if ( 'omg-form-submission-error' === error.code ) {
+    const formError = document.getElementById( 'omg-form-level-error' );
+    formError.innerHTML = error.message;
+    formError.classList.add( 'error' );
+    Events.emit( 'omg-form-submission-error', {
+      error: error,
+      formWrapper: formWrapper,
+      form: form
+    } );
   }
 }
 

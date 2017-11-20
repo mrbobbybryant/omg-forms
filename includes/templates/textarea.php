@@ -1,4 +1,4 @@
-<label id="<?php echo esc_attr( $name ); ?>">
+<label id="<?php echo esc_attr( $name ); ?>" class="omg-forms-input">
     <span class="omg-error"><?php echo esc_html( $error ); ?></span>
 	<?php echo esc_html ( $label ); ?>
 	<textarea
