@@ -86,3 +86,11 @@ function get_form_group( $groups, $group_id ) {
 
 	return ! empty( $result ) ? $result[0] : false;
 }
+
+function is_form_type( $type, $form ) {
+	if ( is_array( $form[ 'form_type' ] ) ) {
+		return in_array( $type, $form[ 'form_type' ] );
+	}
+
+	return $type === $form[ 'form_type' ];
+}
