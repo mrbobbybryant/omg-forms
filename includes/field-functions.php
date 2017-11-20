@@ -82,3 +82,103 @@ function register_supplementary_field( $form_type, $field_args, $form_args ) {
 
 	return $form_args;
 }
+
+function states_list() {
+	$states = array(
+		'Alabama'=>'AL',
+		'Alaska'=>'AK',
+		'Arizona'=>'AZ',
+		'Arkansas'=>'AR',
+		'California'=>'CA',
+		'Colorado'=>'CO',
+		'Connecticut'=>'CT',
+		'Delaware'=>'DE',
+		'Florida'=>'FL',
+		'Georgia'=>'GA',
+		'Hawaii'=>'HI',
+		'Idaho'=>'ID',
+		'Illinois'=>'IL',
+		'Indiana'=>'IN',
+		'Iowa'=>'IA',
+		'Kansas'=>'KS',
+		'Kentucky'=>'KY',
+		'Louisiana'=>'LA',
+		'Maine'=>'ME',
+		'Maryland'=>'MD',
+		'Massachusetts'=>'MA',
+		'Michigan'=>'MI',
+		'Minnesota'=>'MN',
+		'Mississippi'=>'MS',
+		'Missouri'=>'MO',
+		'Montana'=>'MT',
+		'Nebraska'=>'NE',
+		'Nevada'=>'NV',
+		'New Hampshire'=>'NH',
+		'New Jersey'=>'NJ',
+		'New Mexico'=>'NM',
+		'New York'=>'NY',
+		'North Carolina'=>'NC',
+		'North Dakota'=>'ND',
+		'Ohio'=>'OH',
+		'Oklahoma'=>'OK',
+		'Oregon'=>'OR',
+		'Pennsylvania'=>'PA',
+		'Rhode Island'=>'RI',
+		'South Carolina'=>'SC',
+		'South Dakota'=>'SD',
+		'Tennessee'=>'TN',
+		'Texas'=>'TX',
+		'Utah'=>'UT',
+		'Vermont'=>'VT',
+		'Virginia'=>'VA',
+		'Washington'=>'WA',
+		'West Virginia'=>'WV',
+		'Wisconsin'=>'WI',
+		'Wyoming'=>'WY'
+	);
+
+	return array_map( function( $short, $long ) {
+		return [
+			'value' => $short,
+			'label' => $long
+		];
+	},  array_keys($states), $states);
+
+}
+
+function months_list() {
+	$months = array(
+		'01' => 'January',
+		'02' => 'February',
+		'03' => 'March',
+		'04' => 'April',
+		'05' => 'May',
+		'06' => 'June',
+		'07' => 'July ',
+		'08' => 'August',
+		'09' => 'September',
+		'10' => 'October',
+		'11' => 'November',
+		'12' => 'December'
+	);
+
+	return array_map( function( $short, $long ) {
+		return [
+			'value' => $short,
+			'label' => $long
+		];
+	},  array_keys($months), $months);
+
+}
+
+function years_list() {
+	$years = range( date("Y"),date("Y",strtotime("+20 year") ) );
+
+	return array_map( function( $date ) {
+		return [
+			'value' => $date,
+			'label' => $date
+		];
+	},  $years);
+
+}

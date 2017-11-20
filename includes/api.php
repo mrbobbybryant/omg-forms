@@ -16,7 +16,6 @@ function register_rest_endpoint() {
 	) );
 }
 
-
 function create_item_permissions_check( $request ) {
 	$allow_anonymous = apply_filters( 'rest_allow_anonymous_entries', true, $request );
 
@@ -122,7 +121,7 @@ function get_field_sanitize_type( $type ) {
 		case 'email':
 			return 'sanitize_email';
 		case 'textarea':
-			return 'wp_kses_post';
+			return 'wp_filter_kses_post';
 		case 'number':
 			return 'absint';
 		default:
