@@ -2,6 +2,7 @@
 namespace OMGForms\Core;
 
 use OMGForms\Template;
+use OMGForms\Helpers;
 
 function get_field_template( $field_type, $settings ) {
 	$field_settings = format_field( $settings );
@@ -70,7 +71,7 @@ function get_fields( $form ) {
 }
 
 function register_supplementary_field( $form_type, $field_args, $form_args ) {
-	if ( $form_args[ 'form_type' ] === $form_type ) {
+	if ( Helpers\is_form_type( $form_type, $form_args ) ) {
 
 		if ( ! isset( $field_args[ 'group' ] ) && isset( $form_args[ 'groups' ] ) ) {
 			$last_group = count( $form_args[ 'groups' ] ) - 1;

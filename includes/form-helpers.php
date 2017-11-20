@@ -14,7 +14,11 @@ function get_form_rest_attribute( $args ) {
 }
 
 function get_form_type_attribute( $args ) {
-	return sprintf( 'data-formtype=%s', $args[ 'form_type' ] );
+	if ( is_array( $args[ 'form_type' ] ) ) {
+		return sprintf( 'data-formtype=%s', json_encode( $args[ 'form_type' ] ) );
+	}
+
+	return sprintf( 'data-formtype=%s', json_encode( [ $args[ 'form_type' ] ] ) );
 }
 
 function validate_form_options( $args ) {

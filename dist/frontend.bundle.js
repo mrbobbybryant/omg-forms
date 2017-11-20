@@ -125,6 +125,7 @@ exports.default = function (Events) {
       data.append('formId', form.getAttribute('id'));
 
       if (parseInt(formWrapper.dataset.rest)) {
+        console.log(JSON.parse(formWrapper.dataset.formtype));
         submitForm(data).then(function (response) {
           handleFormSuccess(response, formWrapper, form, Events);
         }).catch(function (error) {
@@ -136,7 +137,7 @@ exports.default = function (Events) {
           data: data,
           formWrapper: formWrapper,
           form: form,
-          formType: formWrapper.dataset.formtype
+          formType: JSON.parse(formWrapper.dataset.formtype)
         });
       }
     });
