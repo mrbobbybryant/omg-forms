@@ -69,7 +69,7 @@ function display_form( $slug ) {
 		    do_action( 'omg_form_before_form_submit', $slug, $args ); ?>
 
 	        <p id="omg-form-level-error" class="omg-form-error"></p>
-            <input type="checkbox" name="omg_form_contact_by_mail" value="1" style="display:none !important" tabindex="-1" autocomplete="off">
+            <input type="checkbox" name="omg-forms-contact_by_mail" value="1" style="display:none !important" tabindex="-1" autocomplete="off">
 
 		    <?php echo get_field_template( Template\get_template_name( 'submit' ), [] ); ?>
         </form>
