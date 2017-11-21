@@ -71,6 +71,10 @@ function validate_form_options( $args ) {
 
 	}
 
+	if ( ! isset( $args[ 'success_message' ] ) && ! isset( $args[ 'redirect_url' ] ) ) {
+		trigger_error( 'Your form must have either a redirect_url or a success_message to work properly.', E_USER_WARNING );
+	}
+
 	do_action( 'omg_form_validation', $args );
 
 }
