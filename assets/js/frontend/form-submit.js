@@ -25,7 +25,6 @@ export default function( Events ) {
       data.append( 'formId', form.getAttribute( 'id' ) );
 
       if ( parseInt( formWrapper.dataset.rest ) ) {
-          console.log(JSON.parse( formWrapper.dataset.formtype ));
         submitForm( data )
           .then( ( response ) => {
             handleFormSuccess( response, formWrapper, form, Events );
