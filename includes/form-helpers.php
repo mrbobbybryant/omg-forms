@@ -142,3 +142,7 @@ function return_error( $code, $message, $status, $data = false ) {
 		array( 'status' => $status )
 	);
 }
+
+function normalize_field_name( $field ) {
+	return str_replace( 'omg-forms-', '', $field );
+}

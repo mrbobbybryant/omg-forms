@@ -1,9 +1,9 @@
 <?php
 namespace OMGForms\API;
 
-use OMGForms\IA;
 use OMGForms\Core;
 use OMGForms\Helpers;
+use OMGForms\Sanitize;
 
 function setup() {
 	add_action( 'rest_api_init', __NAMESPACE__ . '\register_rest_endpoint' );
@@ -56,7 +56,7 @@ function submit_form_data( $request ) {
 		return $required;
 	}
 
-	$data = sanitize_form_data( $parameters['fields'], $form );
+	$data = Sanitize\sanitize_form_data( $parameters['fields'], $form );
 
 	if ( is_wp_error( $data ) ) {
 		return $data;
@@ -75,7 +75,7 @@ function submit_form_data( $request ) {
 
 function check_required_forms( $fields, $form ) {
 	$validation = array_reduce( array_keys( $fields ), function( $acc, $field ) use( $fields, $form ) {
-		$form_field = Core\get_field( $form['name'], normalize_field_name( $field ) );
+		$form_field = Core\get_field( $form['name'], Helpers\normalize_field_name( $field ) );
 		if ( isset( $form_field['required'] ) && true === $form_field['required'] && empty( $fields[ $field] ) ) {
 			$acc = array_merge( $acc, [ $field ] );
 		}
@@ -88,63 +88,6 @@ function check_required_forms( $fields, $form ) {
 		array( 'status' => 400, 'fields' => $validation )
 	);
 
-}
-
-function sanitize_form_data( $fields, $form ) {
-	return array_reduce( array_keys( $fields ), function ( $acc, $field ) use ( $form , $fields) {
-		$form_field = Core\get_field( $form['name'], normalize_field_name( $field ) );
-
-		if ( empty( $form_field ) ) {
-			return $acc;
-		}
-
-		$sanitize = get_sanitization_cb( $form_field );
-
-		if ( is_array( $fields[ $field ] ) ) {
-			/**
-			 * Since this field is an array of values we need to loop over and sanitize them each.
-			 */
-			$acc[ $field ] = array_map( function( $item ) use ( $sanitize ) {
-				return call_user_func_array( $sanitize, [ $item ] );
-			}, $fields[ $field ] );
-		} else {
-			$acc[ $field ] = call_user_func_array( $sanitize, [ $fields[ $field ] ] );
-		}
-
-		return $acc;
-
-	}, [] );
-}
-
-function get_sanitization_cb( $form_field ) {
-	if ( isset( $form_field['sanitize_cb'] ) ) {
-		return $form_field[ 'sanitize_cb' ];
-	} else {
-		return get_field_sanitize_type( $form_field['type'] );
-	}
-}
-
-function get_field_sanitize_type( $type ) {
-	switch ( $type ) {
-		case 'text':
-			return 'sanitize_text_field';
-		case 'email':
-			return 'sanitize_email';
-		case 'textarea':
-			return 'wp_filter_kses_post';
-		case 'number':
-			return 'absint';
-		default:
-			return 'sanitize_text_field';
-	}
-}
-
-function normalize_field_name( $field ) {
-	return str_replace( 'omg-forms-', '', $field );
-}
-
-function is_phone( $value ) {
-	return preg_match( '%^[+]?[0-9()/ -]*$%', $value );
 }
 
 function format_params( $params ) {
