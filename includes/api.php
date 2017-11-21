@@ -30,7 +30,7 @@ function create_item_permissions_check( $request ) {
 function submit_form_data( $request ) {
 	$parameters = $request->get_params();
 
-	if ( $parameters[ 'omg_form_contact_by_mail' ] ) {
+	if ( isset( $parameters[ 'omg-forms-contact_by_mail' ] ) ) {
 		return Helpers\return_error( 'omg-forms-honeypot-error', 'This is not allowed', 400 );
 	}
 
@@ -58,13 +58,17 @@ function submit_form_data( $request ) {
 
 	$data = sanitize_form_data( $parameters['fields'], $form );
 
+	if ( is_wp_error( $data ) ) {
+		return $data;
+	}
+
 	$data = apply_filters( 'omg_forms_sanitize_data', $data, $parameters['form'] );
 
 	if ( is_wp_error( $data ) ) {
 		return $data;
 	}
 
-	$result = apply_filters( 'omg_forms_save_data', true, $data, $form );
+	$result = apply_filters( 'omg_forms_save_data', $data, $form );
 
 	return $result;
 }
