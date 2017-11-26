@@ -8,7 +8,10 @@ A WordPress Forms Solution built specifically for Developers.
 - [Install](#installation)
 - [Usage](#usage)
 - [API](#api)
-- [Lsit of Addons](addons)
+- [Field Types](#supported-field-types)
+- [Customizing the Form](#customizing-the-form)
+- [List of Hooks](#list-of-hooks)
+- [List of Addons](addons)
 - [Roadmap](#roadmap)
 
 ## Why
@@ -28,6 +31,13 @@ I believe:
   - Even if a user did want a new form, odds are I would be tasked with helping them, even though they technically have the ability to make the form themselves.
 
 If that is the case, then why wouldn't I use a forms solution that puts the developer experience first? That is where OMG Forms comes into play.
+
+### Goals
+OMG Forms has a few core goals that it is focused on achieving.
+ - Make it easy for developer to override the default field templates to match their design.
+ - Provide a Developer API which will make it easy for developers to define a form and it fields, without the need to click around in the WordPress Admin. A secondary goal of this feature is to make it a fast and repeatable process for creating forms.
+ - Uses an Addon model so that Developers can extend the core OMG Forms Library to make their own Addons.
+ - OMG Forms will eventually be able to replace all of your form related needs on the frontend. i.e. Login, Register, Payments, Frontend Post Creation, Contact Forms, Subscription Forms, etc. This will allow developers a way to have consisting markup and styles for all of their sites forms site-wide.
 
 ## Installation
 OMG Forms can be installed via composer.
@@ -93,79 +103,210 @@ Or via a built-in shortcode.
 ```
 ## API
 
-### Form Settings
+### \OMGForms\Core\register_form([args])
 
-> The follow api settings will dictate how your new form will function at a global level.
+#### args
 
-**name:** - Should be a *unique name* for this form. i.e. `contact-form` or `contactForm`.
+##### name
 
-**redirect** - Allows you the ability to redirect the form after a successful submission. In order for this to work, you must always provide a `redirect_url` argument as well.
+Type: `string` *(unique name)*
+Default: `none`
 
-**redirect_url** - A valid URL to redirect the user to after a successful form submission.
+Argument is used to give your form a unique name. This is the name you will use when it comes time to display your form. Form names need to be `snake_case` or `camelCase`.
 
-**email** - Allows you the ability to notify someone via email whenever a form is submitted.
+##### form_type
 
-**email_to** - A valid email address of the person to notify after a successful form submission. *(NOTE: Currentl yonly supports notifying one person)*
+Type: `string/array` *(basic-form)*
+Default: `none`
 
-**success_message** - Allows you the ability to customize the success message a user is shown. *This is only used when `redirect` to set to false.*
+This setting tells OMG Forms which Addon, or 'type" of form you are making. For example if this were a standard contact form, then you would be using the Basic addon and this argument would be set to `basic-form`. Other examples would be `authorize_net` and `constant-contact`.\
 
-**form_type** - OMG Forms is built using an addon model. This setting lets you specify which addon or type of form you want this form to be. i.e `basic-form` or `mailchimp` etc...
+This setting could could also be an array of form_types. This is useful when you need a form to serve multiple purposes. For example `[ 'authorize_net', 'basic-form' ]`. This configuration will cause your form to charge a user via Authorize.net while also saving a copy of the transaction as a Basic Form Submission.
 
-**classname** - Allows you do add a custom class to the form wrapper.
+##### redirect
 
-**fields** - An array of all the field types, and their properties.
+Type: `boolean` *(true/false)*
+Default: `none`
 
-### Field Settings
+Used to tell OMG Forms that it should redirect after a successful form submission.
 
-> Each form field has a number of settings which you can use to dictate how that form will look and act.
+##### redirect_to
 
-**slug** - A computer readable unique name for the field.
+Type: `string` *(url)*
+Default: `none`
 
-**label** - A Human readable name for this field. By default each field needs a label. This is an important accessibility best practice.
+If `redirect` is set to `true`, OMG Forms will redirect the user to this page.
 
-**type** - Lets you specify what type of HTML5 field this should be.
-Supports
- - text
- - email
- - checkbox
- - multicheckbox
- - number
- - password
- - radio
- - select
- - tel - *(telephone)*
- - textarea
+##### email
 
-**required** - Can be `true` or `false`. Allows you the ability to make a field required.
+Type: `boolean` *(true/false)*
+Default: `none`
 
-**placeholder** - Lets you set a placeholder value.
+Used to tell OMG Forms if it should notify someone via email after a successful form submission.
 
-**error** - Lets you define an error message for this field if it fails server side validation.
+##### email_to
 
-**template** - While OMG Forms has a built way to override a fields html markup across the board. This settings lets you set a template on a per form or per field basis. *Note: template name cannot match any of the default field template names)*
+Type: `string` *(email address)*
+Default: `none`
 
-**Example**
+If `email` is set to `true`, OMG Forms will email this person once a form has been successfully submitted.
+
+##### success_message
+
+Type: `boolean` *(true/false)*
+Default: `none`
+
+This message will replace the form after a successful form submission. Unless of course you have set the form to **redirect**. In that case, the form will simply redirect.
+
+##### rest_api
+
+Type: `boolean` *(true/false)*
+Default: `false`
+
+This setting is used by Addon Authors to tell OMG Forms if their addon should use the PHP Api or the Javascript Api. `false = JS API` and `true = PHP API`
+
+Again, End Users should not worry about this option. It is up to the addon developer to handle setting this option automatically. Addon author should *see the [hooks list](#list-of-hooks) for information about how to do this properly*.
+
+##### classname
+
+Type: `string`
+Default: `none`
+
+This argument lets you define a css class name which will be added to the form wrapper HTML Element.
+
+##### groups
+
+Type: `array`
+Default: `none`
+
+This argument lets you define groups. Groups are used to "group" various form fields together. Each group in the groups array is an array itself, which contains the following arguments:
+- **id** - `string` *(snake_case)* - Should be unique for each form.
+- **title** - `string` - Allows you the ability to give each section, or group of the form a title.
+- **order** - `number` - This is used by OMG Forms to know what order to place this group in the form.
+- **class** - `string` *(optional)* - Adds a CSS class to the group wrapper HTML Element.
+
+##### Groups Example
 ```php
-[
-    'slug'          => 'first-name',
-    'label'         =>  'First Name',
-    'type'          =>  'text',
-    'required'      =>  true,
-    'template'      =>  'text-larger.php',
-    'placeholder'   =>  'My placeholder text',
-    'error'         =>  'My Error Message'
+'groups'    => [
+            [
+                'id'        => 'group_1',
+                'title'     => esc_html__('Group One Title', 'text-domain'),
+                'order'     => '1',
+                'class'     => 'my-group-class'
+            ],
+            [
+                'id'        => 'group_2',
+                'title'     => esc_html__('Group Two Title', 'text-domain'),
+                'order'     => '2'
+            ]
+        ]
+```
+
+##### fields
+
+Type: `array`
+Default: `none`
+
+The fields argument will contain all of the fields your form will need. This is where all the magic happens. Each field in the fields array is an array itself, which may contain the following arguments:
+- **slug** - `string` *(snake_case)* *(required)* - Should be unique for each form.
+- **label** - `string` *(required)* - This text will be used for the HTML Label associated to this form input.
+- **type** - `string` *(required)* - Tells OMF Forms what type of HTML form field this field should use. See the supported Fields Lists to see all the field types supported by OMG Forms.
+- **required** - `bool` *(true/false)* - Tells OMG Forms if this is a required field. If set to true, then a **required** attribute will be added to the HTML input field. If you choose to omit this from your own form templates then OMG Forms will check that these fields are not empty server side.
+- **class** - `string` *(CSS Class)* - Will add a CSS class to the wrapper form element.
+- **placeholder** - `string` - Will add a placeholder to the HTML output by OMG Forms.
+- **template** - `string` *(file_name)* - One of two ways to tell OMG Forms to load your own template for this field type. *See [Modify OMG Form field Templates](#customizing-the-form), for more information.*
+- **group** - `string` - If your form is using Groups, then OMG Forms will use this argument to properly group form fields when displaying a form.
+- **options** - `array` - If this field is a type which has multiple options, then this argument is used to list those options. Each option in the options array is an associated array, and should have a `value` and a `label` key.
+- **sanitize_cb** - `string` - Argument is used server side to sanitize the field's value. By default OMG Forms sanitizes all field values, but this argument give you more granular control.
+
+##### Fields Example
+
+```php
+'fields' => [
+    [
+        'slug'          =>  'my-slug',
+        'type'          =>  'select',
+        'label'         =>  esc_html__( 'My Select', 'text-domain'),
+        'class'         =>  'my-select-class',
+        'template'      =>  'my-select.php',
+        'placeholder'   =>  esc_html__( 'Select Placeholder', 'text-domain' ),
+        'options'       =>  [
+            [
+                'value' =>  'value_1',
+                'label' =>  esc_html__( 'Value One', 'text-domain' )
+            ],
+            [
+                'value' =>  'value_2',
+                'label' =>  esc_html__( 'Value Two', 'text-domain' )
+            ]
+        ],
+        'group'         => 'group_1'
+    ],
+    [
+        'slug'          =>  'my-number',
+        'type'          =>  'number',
+        'label'         =>  esc_html__( 'My Label', 'text-domain'),
+        'class'         =>  'my-class',
+        'template'      =>  'my-template.php',
+        'group'         =>  'group_1',
+        'sanitize_cb'   =>  'absint'
+    ]
 ]
 ```
 
-### Customizing the Form
+## Supported Field Types
+- checkbox
+- email
+- hidden
+- multi-checkbox
+- number
+- password
+- radio
+- select
+- submit
+- telephone
+- text
+- textarea
+
+## Customizing the Form
 
 > OMG Forms has a built in mechanism which makes override the field html a breeze.
 
-**Step 1** Create a directory in the root of your theme called `forms`.
+Their are two ways that you can tell OMG Forms which templates to load when rendering a certain field type. However regardless of which option you choose the first thing you need to do is create a `forms` directory in the root of your theme.
 
-**Step 2** Create a file for the field you wish to overrider. *(NOTE: Make sure you do the same name.)* So if you want to override how the text fields are looking them you need to create a field called `text.php`.
+**Option 1** This is the easiest option.
+ - Create a file for the field type you wish to overrider, and place it in the `forms` folder. *(NOTE: Make sure you use the same name.)* So if you want to override the templates for all the text fields, then create a field called `text.php`.
+ - As a starter we recommend that you copy the code from the template that ships with OMG Forms. This will give you a good base to start with as you modify the field's HTML markup.
 
-**Step 3** Write your own markup and **profit**. To get started I would encourage you to copy the existing markup and use that as a starting point.
+**Option 2** This option is useful if you need to change the markup for a field type on a per form/field basis. This options has two steps:
+ - Create a file and place it in the `forms` folder. You will want to give this file a unique name. For example if we are changing the text field, we don't want to name the file `text.php`. We would name it something like `donate-text.php`.
+ - Once the file is created and you have wrote the HTML Markup for this new text field, you need to tell the form to use this field template. You can do this by passing the file name to the `template` argument when you register the field in the form. *See the [fields API](#fields) section for more info.
+
+## List of Hooks
+
+#### Action Hooks
+
+`omg_form_before_form` - Allows developers a way to add HTML Markup **before** the form HTML.
+
+`omg_form_before_form_submit` - Allows developers a way to add HTML Markup *after the HTML form fields, but before* the form submit button.
+
+`omg_form_after_form` - Allows developers a way to add HTML Markup **after** the form HTML.
+
+`omg_form_validation` - Provides a way to add additional validation checks. These checks are run by OMG Forms on page load, and are used to notify developers about possible issues they may have with their form.
+
+`omg-form-settings-hook` - OMG Forms comes with a settings page. This hook allows Addon Authors a way to add additional settings sections and fields to this page.
+
+#### Filter Hooks
+
+`omg_forms_save_data` - *This is the primary hook used by addon authors to creat their addon*, This hook exposes the sanitized and validated data so that Addon can use this data to do whatever it is that addon is supposed to do.
+
+`rest_allow_anonymous_entries` Allows Addon Authors to restrict form submissions to logged in users. By default this is set to true, meaning anonymous user **can** submit forms.
+
+`omg_forms_sanitize_data` - Allows Addon Authors to set additional sanitization steps to the sanitization process.
+
+`omg-form-filter-field-args` - Allows Addon Authors a way to modify field arguments after they have been set when the form was registered. This is useful when you need to ensure a certain form is setup with a specific field argument.
+
+`omg_form_filter_register_args` - Similar to `omg-form-filter-field-args`, this filter lets you modify the entire form arguments after a form was created. For example, lots of Addons use this filter to force a certain form of a specific type to set `rest_api => true`.
 
 ## Roadmap
   - Add Logic for conditional fields
