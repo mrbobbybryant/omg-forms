@@ -8,6 +8,16 @@ use OMGForms\Helpers;
 function register_form( $args ) {
 	global $omg_forms;
 
+	/**
+	 * Filters the form arguments passed when a new form is registered.
+	 *
+	 * Allows you an opportunity to modify the arguments prior to validation.
+	 *
+	 * @since 0.2.0
+	 *
+	 * @param array         $args An array of all the form arguments submitted
+	 *                            when calling register_form.
+	 */
 	$args = apply_filters( 'omg_form_filter_register_args', $args );
 
 	/**
@@ -16,6 +26,7 @@ function register_form( $args ) {
 	Helpers\validate_form_options( $args );
 
 	validate_form_fields( $args[ 'fields' ] );
+	
 	/**
 	 * Ensures our global variable is an array, since on startup it will not.
 	 */
@@ -50,6 +61,16 @@ function display_form( $slug ) {
 	ob_start(); ?>
     <div class="omg-form-wrapper" <?php echo esc_attr( $redirect ); ?> <?php echo esc_attr( $rest_type ); ?> <?php echo esc_attr( $form_type ); ?>>
 
+		<?php
+		/**
+	 	 * Fires before the HTML Form tag and after the Form Wrapper element.
+		 *
+		 * Hook is useful if you need to prepend some form of HTML before the form element.
+		 *
+		 * @since 0.2.0
+		 *
+		 */
+		?>
         <?php do_action( 'omg_form_before_form' ); ?>
 
         <?php if ( isset( $args['success_message'] ) ) : ?>
@@ -66,6 +87,18 @@ function display_form( $slug ) {
 		        endforeach;
 	        }
 
+			/**
+			 * Fires before the Form Submit button and error message section.
+			 *
+			 * Hook is useful if you need to add additional form fields to a form of a certain type.
+			 *
+			 * @since 0.2.0
+			 *
+			 * @param string $slug      The current form name.
+ 		 	 * @param array $args       An array of all the form arguments submitted
+			 *                          when calling register_form..
+			 */
+
 		    do_action( 'omg_form_before_form_submit', $slug, $args ); ?>
 
 	        <p id="omg-form-level-error" class="omg-form-error"></p>
@@ -73,6 +106,21 @@ function display_form( $slug ) {
 
 		    <?php echo get_field_template( Template\get_template_name( 'submit' ), [] ); ?>
         </form>
+
+		<?php
+		/**
+		 * Fires after the HTML Form Element.
+		 *
+		 * Hook is useful if you need to add additional HTML after the form
+		 * but before the closing of the OMG Form wraper element.
+		 *
+		 * @since 0.2.0
+		 *
+		 * @param string $slug      The current form name.
+		 * @param array $args       An array of all the form arguments submitted
+		 *                          when calling register_form..
+		 */
+		?>
         <?php do_action( 'omg_form_after_form', $slug, $args ); ?>
     </div>
 
