@@ -1,19 +1,19 @@
 <?php
 
-if ( !defined( 'OMG_FORMS_DIR' ) ) {
+if ( ! defined( 'OMG_FORMS_DIR' ) ) {
 	define( 'OMG_FORMS_DIR', dirname( __FILE__ ) );
 }
 
-if ( !defined( 'OMG_FORMS_URL' ) ) {
+if ( ! defined( 'OMG_FORMS_URL' ) ) {
 	define( 'OMG_FORMS_URL', get_stylesheet_directory_uri() . '/vendor' );
 }
 
-if ( !defined( 'OMG_FORMS_FILE' ) ) {
+if ( ! defined( 'OMG_FORMS_FILE' ) ) {
 	define( 'OMG_FORMS_FILE', __FILE__ );
 }
 
-if ( !defined( 'OMG_FORMS_VERSION' ) ) {
-	define( 'OMG_FORMS_VERSION', '0.7.0-beta3' );
+if ( ! defined( 'OMG_FORMS_VERSION' ) ) {
+	define( 'OMG_FORMS_VERSION', '0.7.0-beta4' );
 }
 
 require_once OMG_FORMS_DIR . '/includes/core.php';
@@ -25,6 +25,7 @@ require_once OMG_FORMS_DIR . '/includes/form-helpers.php';
 require_once OMG_FORMS_DIR . '/includes/settings.php';
 require_once OMG_FORMS_DIR . '/includes/shortcodes.php';
 require_once OMG_FORMS_DIR . '/includes/sanitization.php';
+require_once OMG_FORMS_DIR . '/includes/email.php';
 
 \OMGForms\Core\setup();
 \OMGForms\API\setup();

@@ -4,6 +4,7 @@ namespace OMGForms\API;
 use OMGForms\Core;
 use OMGForms\Helpers;
 use OMGForms\Sanitize;
+use OMGForms\Email;
 
 function setup() {
 	add_action( 'rest_api_init', __NAMESPACE__ . '\register_rest_endpoint' );
@@ -69,6 +70,14 @@ function submit_form_data( $request ) {
 	}
 
 	$result = apply_filters( 'omg_forms_save_data', $data, $form );
+
+	if ( is_wp_error( $result ) ) {
+		return $result;
+	}
+
+	if ( isset( $form['email'] ) && ! empty( $form['email'] ) ) {
+		Email\send( $form, $result );
+	}
 
 	return $result;
 }
