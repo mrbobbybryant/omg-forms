@@ -13,7 +13,7 @@ if ( ! defined( 'OMG_FORMS_FILE' ) ) {
 }
 
 if ( ! defined( 'OMG_FORMS_VERSION' ) ) {
-	define( 'OMG_FORMS_VERSION', '0.7.0-beta4' );
+	define( 'OMG_FORMS_VERSION', '0.8.0' );
 }
 
 require_once OMG_FORMS_DIR . '/includes/core.php';

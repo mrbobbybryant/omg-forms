@@ -43,6 +43,8 @@ function submit_form_data( $request ) {
 
 	$form = Core\get_form( $parameters['form'] );
 
+	$form = apply_filters( 'omg_form_filter_form', $form, $parameters );
+
 	if ( empty( $form ) ) {
 		return new \WP_Error(
 			'omg_form_validation_fail',
@@ -63,7 +65,7 @@ function submit_form_data( $request ) {
 		return $data;
 	}
 
-	$data = apply_filters( 'omg_forms_sanitize_data', $data, $parameters['form'] );
+	$data = apply_filters( 'omg_forms_sanitize_data', $data, $form, $parameters['fields'] );
 
 	if ( is_wp_error( $data ) ) {
 		return $data;
