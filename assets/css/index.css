@@ -40,3 +40,8 @@
   }
 
 }
+
+input[name="omg-forms-contact_by_mail"] {
+  position: relative;
+  left: -999999px;
+}

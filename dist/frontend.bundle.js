@@ -33,6 +33,9 @@
 /******/ 	// expose the module cache
 /******/ 	__webpack_require__.c = installedModules;
 /******/
+/******/ 	// identity function for calling harmony imports with the correct context
+/******/ 	__webpack_require__.i = function(value) { return value; };
+/******/
 /******/ 	// define getter function for harmony exports
 /******/ 	__webpack_require__.d = function(exports, name, getter) {
 /******/ 		if(!__webpack_require__.o(exports, name)) {
@@ -60,38 +63,43 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1);
+/******/ 	return __webpack_require__(__webpack_require__.s = 6);
 /******/ })
 /************************************************************************/
 /******/ ([
-/* 0 */,
-/* 1 */
+/* 0 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _formSubmit = __webpack_require__(2);
-
-var _formSubmit2 = _interopRequireDefault(_formSubmit);
-
-var _index = __webpack_require__(5);
-
-var _index2 = _interopRequireDefault(_index);
-
-var _formEvents = __webpack_require__(6);
-
-var _formEvents2 = _interopRequireDefault(_formEvents);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-document.addEventListener('DOMContentLoaded', function () {
-  window.omg_events = _formEvents2.default;
-  (0, _formSubmit2.default)(window.omg_events);
+Object.defineProperty(exports, "__esModule", {
+  value: true
 });
+exports.default = {
+  events: {},
+  subscribe: function subscribe(eventName, fn) {
+    this.events[eventName] = this.events[eventName] || [];
+    this.events[eventName].push(fn);
+  },
+  unsubscribe: function unsubscribe(eventName, fn) {
+    if (this.events[eventName]) {
+      this.events[eventName] = this.events[eventName].filter(function (eventFn) {
+        return eventFn !== fn;
+      });
+    }
+  },
+  emit: function emit(eventName, data) {
+    if (this.events[eventName]) {
+      this.events[eventName].forEach(function (fn) {
+        fn(data);
+      });
+    }
+  }
+};
 
 /***/ }),
-/* 2 */
+/* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -143,11 +151,11 @@ exports.default = function (Events) {
   });
 };
 
-var _formErrors = __webpack_require__(3);
+var _formErrors = __webpack_require__(4);
 
 var _formErrors2 = _interopRequireDefault(_formErrors);
 
-var _formSuccess = __webpack_require__(4);
+var _formSuccess = __webpack_require__(5);
 
 var _formSuccess2 = _interopRequireDefault(_formSuccess);
 
@@ -254,7 +262,14 @@ var submitForm = function submitForm(data) {
 };
 
 /***/ }),
-/* 3 */
+/* 2 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 3 */,
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -305,7 +320,7 @@ exports.default = function (errors) {
 };
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -332,42 +347,30 @@ exports.default = function (wrapper, form) {
 };
 
 /***/ }),
-/* 5 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
 /* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
+var _formSubmit = __webpack_require__(1);
+
+var _formSubmit2 = _interopRequireDefault(_formSubmit);
+
+var _index = __webpack_require__(2);
+
+var _index2 = _interopRequireDefault(_index);
+
+var _formEvents = __webpack_require__(0);
+
+var _formEvents2 = _interopRequireDefault(_formEvents);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+document.addEventListener('DOMContentLoaded', function () {
+  window.omg_events = _formEvents2.default;
+  (0, _formSubmit2.default)(window.omg_events);
 });
-exports.default = {
-  events: {},
-  subscribe: function subscribe(eventName, fn) {
-    this.events[eventName] = this.events[eventName] || [];
-    this.events[eventName].push(fn);
-  },
-  unsubscribe: function unsubscribe(eventName, fn) {
-    if (this.events[eventName]) {
-      this.events[eventName] = this.events[eventName].filter(function (eventFn) {
-        return eventFn !== fn;
-      });
-    }
-  },
-  emit: function emit(eventName, data) {
-    if (this.events[eventName]) {
-      this.events[eventName].forEach(function (fn) {
-        fn(data);
-      });
-    }
-  }
-};
 
 /***/ })
 /******/ ]);

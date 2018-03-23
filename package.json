@@ -29,7 +29,7 @@
     "postcss-cssnext": "^2.9.0",
     "postcss-import": "^9.1.0",
     "postcss-loader": "^1.2.2",
-    "webpack": "beta"
+    "webpack": "2.6.1"
   },
   "keywords": [],
   "dependencies": {
