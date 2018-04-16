@@ -111,6 +111,8 @@ Object.defineProperty(exports, "__esModule", {
 
 exports.default = function (Events) {
   var formButtons = document.querySelectorAll('.omg-form-submit-btn');
+  var processForm = processFormRequest(Events);
+  window.processFormRequest = processForm;
 
   if (!formButtons || 0 === formButtons.length) {
     return false;
@@ -123,30 +125,7 @@ exports.default = function (Events) {
     form.addEventListener('submit', function (e) {
       e.preventDefault();
 
-      var data = new FormData(form);
-      var formError = document.getElementById('omg-form-level-error');
-
-      if (formError.classList.contains('error')) {
-        formError.classList.remove('error');
-      }
-
-      data.append('formId', form.getAttribute('id'));
-
-      if (parseInt(formWrapper.dataset.rest)) {
-        submitForm(data).then(function (response) {
-          handleFormSuccess(response, formWrapper, form, Events);
-        }).catch(function (error) {
-          handleFormErrors(error, formWrapper, form, Events);
-          // console.warn( error );
-        });
-      } else {
-        Events.emit('omg-form-submit', {
-          data: data,
-          formWrapper: formWrapper,
-          form: form,
-          formType: JSON.parse(formWrapper.dataset.formtype)
-        });
-      }
+      processForm(form, formWrapper);
     });
   });
 };
@@ -160,6 +139,40 @@ var _formSuccess = __webpack_require__(5);
 var _formSuccess2 = _interopRequireDefault(_formSuccess);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function processFormRequest(Events) {
+  return function (form, formWrapper) {
+    var data = new FormData(form);
+    var formError = document.getElementById('omg-form-level-error');
+    var button = form.querySelector('.omg-form-submit-btn');
+
+    button.setAttribute('disabled', 'disabled');
+
+    if (formError.classList.contains('error')) {
+      formError.classList.remove('error');
+    }
+
+    data.append('formId', form.getAttribute('id'));
+
+    if (parseInt(formWrapper.dataset.rest)) {
+      submitForm(data).then(function (response) {
+        button.removeAttribute('disabled');
+        handleFormSuccess(response, formWrapper, form, Events);
+      }).catch(function (error) {
+        button.removeAttribute('disabled');
+        handleFormErrors(error, formWrapper, form, Events);
+        // console.warn( error );
+      });
+    } else {
+      Events.emit('omg-form-submit', {
+        data: data,
+        formWrapper: formWrapper,
+        form: form,
+        formType: JSON.parse(formWrapper.dataset.formtype)
+      });
+    }
+  };
+}
 
 var getFormElements = function getFormElements(button) {
   var form = button.closest('form');
@@ -233,10 +246,9 @@ var handleFormSuccess = function handleFormSuccess(response, formWrapper, form, 
 var submitForm = function submitForm(data) {
   var endpoint = OMGForms.baseURL + '/wp-json/omg/v1/forms';
   return new Promise(function (resolve, reject) {
-
     var xhr = new XMLHttpRequest();
 
-    xhr.addEventListener("load", function (evt) {
+    xhr.addEventListener('load', function (evt) {
       if (xhr.readyState === 4 && xhr.status === 200) {
         return resolve(JSON.parse(xhr.response));
       }
@@ -246,11 +258,11 @@ var submitForm = function submitForm(data) {
       }
     }, false);
 
-    xhr.addEventListener("error", function (error) {
+    xhr.addEventListener('error', function (error) {
       return reject(JSON.parse(error));
     }, false);
 
-    xhr.addEventListener("abort", function (error) {
+    xhr.addEventListener('abort', function (error) {
       return reject(JSON.parse(error));
     }, false);
 
